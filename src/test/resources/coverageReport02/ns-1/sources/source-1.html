@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GsonRepo</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Data</a>
+</div>
+
+<h1>Coverage Summary for Class: GsonRepo (Data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GsonRepo</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package Data;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.google.gson.Gson;
+<i class="no-highlight">4</i>&nbsp;import com.google.gson.GsonBuilder;
+<i class="no-highlight">5</i>&nbsp;import com.google.gson.reflect.TypeToken;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import java.io.File;
+<i class="no-highlight">8</i>&nbsp;import java.io.FileReader;
+<i class="no-highlight">9</i>&nbsp;import java.io.FileWriter;
+<i class="no-highlight">10</i>&nbsp;import java.io.IOException;
+<i class="no-highlight">11</i>&nbsp;import java.util.List;
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;public class GsonRepo&lt;T&gt; extends Repo&lt;T&gt;{
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * GSON object used to convert java objects to their json representation,
+<i class="no-highlight">17</i>&nbsp;     * and json to objects.
+<i class="no-highlight">18</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">19</i>&nbsp;    private static final Gson GSON = new GsonBuilder()</b>
+<b class="nc"><i class="no-highlight">20</i>&nbsp;            .setPrettyPrinting()</b>
+<b class="nc"><i class="no-highlight">21</i>&nbsp;            .create();</b>
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;    public GsonRepo(Class&lt;T&gt; elementType) {
+<b class="nc"><i class="no-highlight">24</i>&nbsp;        super(elementType);</b>
+<i class="no-highlight">25</i>&nbsp;    }
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * Method for reading from json file.
+<i class="no-highlight">29</i>&nbsp;     * @param file - the file we read from
+<i class="no-highlight">30</i>&nbsp;     * @throws IOException if file doesn&#39;t exist, or is empty
+<i class="no-highlight">31</i>&nbsp;     */
+<i class="no-highlight">32</i>&nbsp;    public void loadFromFile(File file) throws IOException {
+<b class="nc"><i class="no-highlight">33</i>&nbsp;        try (var reader = new FileReader(file)) {</b>
+<b class="nc"><i class="no-highlight">34</i>&nbsp;            var listType = TypeToken.getParameterized(List.class, elementType).getType();</b>
+<b class="nc"><i class="no-highlight">35</i>&nbsp;            elements = GSON.fromJson(reader, listType);</b>
+<b class="nc"><i class="no-highlight">36</i>&nbsp;        }</b>
+<i class="no-highlight">37</i>&nbsp;    }
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    /**
+<i class="no-highlight">40</i>&nbsp;     * Method for writing to json file
+<i class="no-highlight">41</i>&nbsp;     * @param file - the file we write to
+<i class="no-highlight">42</i>&nbsp;     * @throws IOException if file isn&#39;t valid
+<i class="no-highlight">43</i>&nbsp;     */
+<i class="no-highlight">44</i>&nbsp;    public void saveToFile(File file) throws IOException {
+<b class="nc"><i class="no-highlight">45</i>&nbsp;        try (var writer = new FileWriter(file)) {</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;            GSON.toJson(elements, writer);</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        }</b>
+<i class="no-highlight">48</i>&nbsp;    }
+<i class="no-highlight">49</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-05-14 21:45</div>
+</div>
+</body>
+</html>

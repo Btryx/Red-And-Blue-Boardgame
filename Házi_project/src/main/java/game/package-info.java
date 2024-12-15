@@ -1,5 +1,0 @@
-/**
- * package doc
- */
-
-package game;

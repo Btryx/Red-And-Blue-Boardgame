@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Direction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model</a>
+</div>
+
+<h1>Coverage Summary for Class: Direction (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Direction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package model;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;/**
+<i class="no-highlight">4</i>&nbsp; * Represents the four main directions.
+<i class="no-highlight">5</i>&nbsp; */
+<b class="fc"><i class="no-highlight">6</i>&nbsp;public enum Direction {</b>
+<i class="no-highlight">7</i>&nbsp;
+<b class="fc"><i class="no-highlight">8</i>&nbsp;    UP(-1, 0),</b>
+<b class="fc"><i class="no-highlight">9</i>&nbsp;    RIGHT(0, 1),</b>
+<b class="fc"><i class="no-highlight">10</i>&nbsp;    DOWN(1, 0),</b>
+<b class="fc"><i class="no-highlight">11</i>&nbsp;    LEFT(0, -1);</b>
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;    private final int rowChange;
+<i class="no-highlight">14</i>&nbsp;    private final int colChange;
+<i class="no-highlight">15</i>&nbsp;
+<b class="fc"><i class="no-highlight">16</i>&nbsp;    Direction(int rowChange, int colChange) {</b>
+<b class="fc"><i class="no-highlight">17</i>&nbsp;        this.rowChange = rowChange;</b>
+<b class="fc"><i class="no-highlight">18</i>&nbsp;        this.colChange = colChange;</b>
+<i class="no-highlight">19</i>&nbsp;    }
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;    /**
+<i class="no-highlight">22</i>&nbsp;     * @return the change in the row coordinate when moving to the direction
+<i class="no-highlight">23</i>&nbsp;     */
+<i class="no-highlight">24</i>&nbsp;    public int getRowChange() {
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        return rowChange;</b>
+<i class="no-highlight">26</i>&nbsp;    }
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;    /**
+<i class="no-highlight">29</i>&nbsp;     * @return the change in the column coordinate when moving to the direction
+<i class="no-highlight">30</i>&nbsp;     */
+<i class="no-highlight">31</i>&nbsp;    public int getColChange() {
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        return colChange;</b>
+<i class="no-highlight">33</i>&nbsp;    }
+<i class="no-highlight">34</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-05-14 21:45</div>
+</div>
+</body>
+</html>

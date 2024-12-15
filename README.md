@@ -1,12 +1,13 @@
-# A boardgame made with javaFX for my second sememster subject: Software development in practice
+# Szoftverfejlesztés beadandó
+## Szoftverfejlesztés házi feladat projekt. Játékok 2.10.
 
-The game
+2.10. Feladat
 -------------
 
-### There are 22 red, and 3 blue pieces on the 5x5 sized board. One player moves with red, the other, with blue. The blue player begins the game.
-### Every step consists of moving one piece.
+### Adott 22 piros és 3 kék korong egy 5×5 mezőből ´álló táblán. Az egyik játékos a piros, a másik a kék korongokkal játszik. A játékosok felváltva következnek lépni, kék kezd.
+### Minden lépésben egy saját színű korongot kell elmozdítani:
 
-1. The red player can only move to a neighbouring field
-2. The blue player can only move to a neighbouring field that is already occupied by a red piece. Then, this red piece will be removed.
+1. piros koronggal egy negyszomszedos ures mezore lehet lepni,
+2. kek koronggal egy olyan negyszomszedos mezore lehet lepni, amelyen egy piros korong van (ezt a korongot le kell venni a tablarol).
    
-### The red player wins, if all blue pieces are in one single row or column. The blue player wins, if they cannot move in any direction.
+### A piros korongokkal jatszo jatekos nyerte meg a jatekot akkor, ha valamennyi kek korong egy sorban vagy oszlopban van. A kek korongokkal jatszo jatekos nyerte meg a jatekot akkor, ha nem tud lepni.

@@ -1,0 +1,82 @@
+[
+  {
+    "winnerName": "Charlie",
+    "winnerColor": "Red",
+    "winnerMoves": 7
+  },
+  {
+    "winnerName": "Edd",
+    "winnerColor": "Blue",
+    "winnerMoves": 9
+  },
+  {
+    "winnerName": "Joe",
+    "winnerColor": "Blue",
+    "winnerMoves": 5
+  },
+  {
+    "winnerName": "k",
+    "winnerColor": "Red",
+    "winnerMoves": 9
+  },
+  {
+    "winnerName": "bea",
+    "winnerColor": "Blue",
+    "winnerMoves": 7
+  },
+  {
+    "winnerName": "Player Red",
+    "winnerColor": "Red",
+    "winnerMoves": 14
+  },
+  {
+    "winnerName": "Andi",
+    "winnerColor": "Blue",
+    "winnerMoves": 19
+  },
+  {
+    "winnerName": "fanni",
+    "winnerColor": "Red",
+    "winnerMoves": 11
+  },
+  {
+    "winnerName": "béla",
+    "winnerColor": "Blue",
+    "winnerMoves": 17
+  },
+  {
+    "winnerName": "p",
+    "winnerColor": "Red",
+    "winnerMoves": 13
+  },
+  {
+    "winnerName": "xAG",
+    "winnerColor": "Blue",
+    "winnerMoves": 27
+  },
+  {
+    "winnerName": "pi314",
+    "winnerColor": "Red",
+    "winnerMoves": 30
+  },
+  {
+    "winnerName": "dumbo",
+    "winnerColor": "Red",
+    "winnerMoves": 3
+  },
+  {
+    "winnerName": "Player Red",
+    "winnerColor": "Red",
+    "winnerMoves": 3
+  },
+  {
+    "winnerName": "fred",
+    "winnerColor": "Red",
+    "winnerMoves": 5
+  },
+  {
+    "winnerName": "Player Red",
+    "winnerColor": "Red",
+    "winnerMoves": 4
+  }
+]
