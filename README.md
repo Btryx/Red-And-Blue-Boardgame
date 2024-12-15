@@ -1,4 +1,4 @@
-# A boardgame coded in java for my second smemster subject: Sotware development in practice
+# A boardgame coded in java for my second sememster subject: Software development in practice
 
 The game
 -------------
