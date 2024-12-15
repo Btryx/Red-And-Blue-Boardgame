@@ -7,3 +7,6 @@
 2. The blue player can only move to a neighbouring field that is already occupied by a red piece. Then, this red piece will be removed.
 
 ## The red player wins, if all blue pieces are in one single row or column. The blue player wins, if they cannot move in any direction.
+
+![kép](https://github.com/user-attachments/assets/d03db883-d5fc-4742-893a-407ab5261337)
+
