@@ -3,10 +3,10 @@
 The game
 -------------
 
-### There 22 red, and 3 blue pieces on the 5x5 sized board. One player moves with red, the other, with blue. The blue player begins the game.
+### There are 22 red, and 3 blue pieces on the 5x5 sized board. One player moves with red, the other, with blue. The blue player begins the game.
 ### Every step consists of moving one piece.
 
-1. The red player can only move one, to a neighbouring field
+1. The red player can only move to a neighbouring field
 2. The blue player can only move to a neighbouring field that is already occupied by a red piece. Then, this red piece will be removed.
    
 ### The red player wins, if all blue pieces are in one single row or column. The blue player wins, if they cannot move in any direction.
