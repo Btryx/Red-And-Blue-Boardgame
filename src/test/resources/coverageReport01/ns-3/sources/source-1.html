@@ -101,19 +101,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package model;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import model.Direction;
+<i class="no-highlight">3</i>&nbsp;import enums.Direction;
 <i class="no-highlight">4</i>&nbsp;
 <i class="no-highlight">5</i>&nbsp;import java.util.Objects;
 <i class="no-highlight">6</i>&nbsp;
 <i class="no-highlight">7</i>&nbsp;/**
-<i class="no-highlight">8</i>&nbsp; * Class responsible for making the base model of the game.
+<i class="no-highlight">8</i>&nbsp; * Class responsible for making the base model of the application.
 <i class="no-highlight">9</i>&nbsp; */
 <i class="no-highlight">10</i>&nbsp;public class GameModel {
 <i class="no-highlight">11</i>&nbsp;
 <b class="fc"><i class="no-highlight">12</i>&nbsp;    public static int BOARD_SIZE = 5;</b>
 <i class="no-highlight">13</i>&nbsp;
 <i class="no-highlight">14</i>&nbsp;    /**
-<i class="no-highlight">15</i>&nbsp;     * Represents the board in a 2D array.
+<i class="no-highlight">15</i>&nbsp;     * Represents the controller in a 2D array.
 <i class="no-highlight">16</i>&nbsp;     */
 <b class="nc"><i class="no-highlight">17</i>&nbsp;    public MyCircle[][] myCircles = new MyCircle[BOARD_SIZE][BOARD_SIZE];</b>
 <i class="no-highlight">18</i>&nbsp;
@@ -163,7 +163,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">62</i>&nbsp;            }
 <i class="no-highlight">63</i>&nbsp;
 <b class="nc"><i class="no-highlight">64</i>&nbsp;        } catch (IndexOutOfBoundsException e) {</b>
-<b class="nc"><i class="no-highlight">65</i>&nbsp;            System.out.println(&quot;Stay on board!&quot;);</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;            System.out.println(&quot;Stay on controller!&quot;);</b>
 <b class="nc"><i class="no-highlight">66</i>&nbsp;        }</b>
 <i class="no-highlight">67</i>&nbsp;    }
 <i class="no-highlight">68</i>&nbsp;

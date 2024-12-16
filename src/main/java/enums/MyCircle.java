@@ -1,4 +1,4 @@
-package model;
+package enums;
 
 /**
  * Represents the color of elements on the board.

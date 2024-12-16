@@ -1,25 +1,27 @@
 import model.GameModel;
-import model.MyCircle;
+import enums.MyCircle;
 import org.junit.jupiter.api.Test;
-import model.Direction;
+import enums.Direction;
+import service.GameService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameModelTest {
 
     GameModel model = new GameModel();
+    private final GameService gameService = new GameService(model);
 
     @Test
     void moveTest(){
         model.move(2, 2, Direction.UP);
-        if(!model.isGameOver()) {
-            assertEquals(model.board[2][2], MyCircle.NONE);
-            assertEquals(model.board[1][2], MyCircle.BLUE);
+        if(!gameService.isGameOver()) {
+            assertEquals(model.getBoard()[2][2], MyCircle.NONE);
+            assertEquals(model.getBoard()[1][2], MyCircle.BLUE);
             model.move(3, 2, Direction.UP);
-            assertEquals(model.board[3][2], MyCircle.NONE);
-            assertEquals(model.board[2][2], MyCircle.RED);
+            assertEquals(model.getBoard()[3][2], MyCircle.NONE);
+            assertEquals(model.getBoard()[2][2], MyCircle.RED);
         }else{
-            assertEquals(model.board[2][2], MyCircle.BLUE);
+            assertEquals(model.getBoard()[2][2], MyCircle.BLUE);
         }
     }
 

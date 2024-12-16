@@ -1,4 +1,4 @@
-package board;
+package controller;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 
-public class SecondController {
+public class OpeningSceneController {
 
     @FXML
     public TextField secondPlayer;

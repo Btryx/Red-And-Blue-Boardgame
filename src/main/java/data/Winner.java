@@ -1,4 +1,4 @@
-package Data;
+package data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

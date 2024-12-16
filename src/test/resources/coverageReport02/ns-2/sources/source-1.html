@@ -17,10 +17,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">board</a>
+    <a href="../index.html">controller</a>
 </div>
 
-<h1>Coverage Summary for Class: GameController (board)</h1>
+<h1>Coverage Summary for Class: GameController (controller)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -73,9 +73,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package board;
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package controller;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import Data.WinnerRepo;
+<i class="no-highlight">3</i>&nbsp;import data.WinnerRepo;
 <i class="no-highlight">4</i>&nbsp;import javafx.application.Platform;
 <i class="no-highlight">5</i>&nbsp;import javafx.beans.property.SimpleStringProperty;
 <i class="no-highlight">6</i>&nbsp;import javafx.beans.property.StringProperty;
@@ -93,15 +93,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">18</i>&nbsp;import javafx.scene.shape.Circle;
 <i class="no-highlight">19</i>&nbsp;import javafx.stage.Stage;
 <i class="no-highlight">20</i>&nbsp;import model.GameModel;
-<i class="no-highlight">21</i>&nbsp;import model.MyCircle;
-<i class="no-highlight">22</i>&nbsp;import model.Direction;
+<i class="no-highlight">21</i>&nbsp;import enums.MyCircle;
+<i class="no-highlight">22</i>&nbsp;import enums.Direction;
 <i class="no-highlight">23</i>&nbsp;import org.tinylog.Logger;
 <i class="no-highlight">24</i>&nbsp;
 <i class="no-highlight">25</i>&nbsp;import java.io.File;
 <i class="no-highlight">26</i>&nbsp;import java.io.IOException;
 <i class="no-highlight">27</i>&nbsp;import java.util.Objects;
-<i class="no-highlight">28</i>&nbsp;import Data.Winner;
-<i class="no-highlight">29</i>&nbsp;import static board.MovingPieces.*;
+<i class="no-highlight">28</i>&nbsp;import data.Winner;
+<i class="no-highlight">29</i>&nbsp;import static controller.MovingPieces.*;
 <i class="no-highlight">30</i>&nbsp;import static model.GameModel.BOARD_SIZE;
 <i class="no-highlight">31</i>&nbsp;
 <b class="nc"><i class="no-highlight">32</i>&nbsp;public class GameController {</b>
@@ -179,7 +179,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">104</i>&nbsp;    }
 <i class="no-highlight">105</i>&nbsp;
 <i class="no-highlight">106</i>&nbsp;    private void performMove(Direction direction) throws IOException{
-<b class="nc"><i class="no-highlight">107</i>&nbsp;        mp.moveBoardPieces(direction, model.board);</b>
+<b class="nc"><i class="no-highlight">107</i>&nbsp;        mp.moveBoardPieces(direction, model.controller);</b>
 <b class="nc"><i class="no-highlight">108</i>&nbsp;        model.move(row, col, direction);</b>
 <b class="nc"><i class="no-highlight">109</i>&nbsp;        text.setText(changeTurnText());</b>
 <b class="nc"><i class="no-highlight">110</i>&nbsp;        Logger.debug(&quot;\n&quot;+model);</b>
@@ -226,7 +226,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">151</i>&nbsp;        Circle c;
 <b class="nc"><i class="no-highlight">152</i>&nbsp;        for(int i = 0; i &lt; BOARD_SIZE; i++) {</b>
 <b class="nc"><i class="no-highlight">153</i>&nbsp;            for (int j = 0; j &lt; BOARD_SIZE; j++) {</b>
-<b class="nc"><i class="no-highlight">154</i>&nbsp;                if(Objects.equals(model.board[i][j], MyCircle.BLUE)){</b>
+<b class="nc"><i class="no-highlight">154</i>&nbsp;                if(Objects.equals(model.controller[i][j], MyCircle.BLUE)){</b>
 <b class="nc"><i class="no-highlight">155</i>&nbsp;                    c = createCircle(Color.BLUE);</b>
 <i class="no-highlight">156</i>&nbsp;                }else {
 <b class="nc"><i class="no-highlight">157</i>&nbsp;                    c = createCircle(Color.RED);</b>

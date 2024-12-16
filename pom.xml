@@ -6,7 +6,7 @@
     <groupId>hu.unideb.szoftverfejlesztes</groupId>
     <artifactId>Hazi_Project_Olah_Beatrix</artifactId>
     <version>1.0</version>
-    <description> A board game for two players, one is with the red circles, the other player is with the blue ones.
+    <description> A controller application for two players, one is with the red circles, the other player is with the blue ones.
         Blue can step on the red circles, making them disappear, while red can only step on empty cells.
         If blue cannot step anywhere with any of the blue circles, he won. If all the blue circles are on the same row,
         or on the same column, red wins.</description>
@@ -24,7 +24,7 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <exec.mainClass>game.Main</exec.mainClass>
+        <exec.mainClass>application.Main</exec.mainClass>
         <javafx.version>18.0.1</javafx.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <maven.javadoc.version>3.3.2</maven.javadoc.version>

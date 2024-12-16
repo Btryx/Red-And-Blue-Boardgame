@@ -81,39 +81,39 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">6</i>&nbsp;import java.util.Objects;
 <i class="no-highlight">7</i>&nbsp;
 <i class="no-highlight">8</i>&nbsp;/**
-<i class="no-highlight">9</i>&nbsp; * Class responsible for making the base model of the game.
+<i class="no-highlight">9</i>&nbsp; * Class responsible for making the base model of the application.
 <i class="no-highlight">10</i>&nbsp; */
 <i class="no-highlight">11</i>&nbsp;public class GameModel {
 <i class="no-highlight">12</i>&nbsp;
 <i class="no-highlight">13</i>&nbsp;    /**
-<i class="no-highlight">14</i>&nbsp;     * Variable tht represents the size of the board.
+<i class="no-highlight">14</i>&nbsp;     * Variable tht represents the size of the controller.
 <i class="no-highlight">15</i>&nbsp;     */
 <b class="fc"><i class="no-highlight">16</i>&nbsp;    public static int BOARD_SIZE = 5;</b>
 <i class="no-highlight">17</i>&nbsp;
 <i class="no-highlight">18</i>&nbsp;    /**
-<i class="no-highlight">19</i>&nbsp;     * Represents the board in a 2D array.
+<i class="no-highlight">19</i>&nbsp;     * Represents the controller in a 2D array.
 <i class="no-highlight">20</i>&nbsp;     */
-<b class="fc"><i class="no-highlight">21</i>&nbsp;    public MyCircle[][] board = new MyCircle[BOARD_SIZE][BOARD_SIZE];</b>
+<b class="fc"><i class="no-highlight">21</i>&nbsp;    public MyCircle[][] controller = new MyCircle[BOARD_SIZE][BOARD_SIZE];</b>
 <i class="no-highlight">22</i>&nbsp;
 <i class="no-highlight">23</i>&nbsp;    /**
-<i class="no-highlight">24</i>&nbsp;     * Constructor that fills up the {@link #board}
+<i class="no-highlight">24</i>&nbsp;     * Constructor that fills up the {@link #controller}
 <i class="no-highlight">25</i>&nbsp;     * array with the necessary elements.
 <i class="no-highlight">26</i>&nbsp;     */
 <b class="fc"><i class="no-highlight">27</i>&nbsp;    public GameModel() {</b>
 <b class="fc"><i class="no-highlight">28</i>&nbsp;        for (int i = 0; i &lt; BOARD_SIZE; i++) {</b>
 <b class="fc"><i class="no-highlight">29</i>&nbsp;            for (int j = 0; j &lt; BOARD_SIZE; j++) {</b>
 <b class="fc"><i class="no-highlight">30</i>&nbsp;                if(i == 0 &amp;&amp; j == 4 || i == 2 &amp;&amp; j == 2|| i == 4 &amp;&amp; j == 0){</b>
-<b class="fc"><i class="no-highlight">31</i>&nbsp;                    board[i][j] = MyCircle.BLUE;</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;                    controller[i][j] = MyCircle.BLUE;</b>
 <i class="no-highlight">32</i>&nbsp;                }
 <i class="no-highlight">33</i>&nbsp;                else{
-<b class="fc"><i class="no-highlight">34</i>&nbsp;                    board[i][j] = MyCircle.RED;</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;                    controller[i][j] = MyCircle.RED;</b>
 <i class="no-highlight">35</i>&nbsp;                }
 <i class="no-highlight">36</i>&nbsp;            }
 <i class="no-highlight">37</i>&nbsp;        }
 <i class="no-highlight">38</i>&nbsp;    }
 <i class="no-highlight">39</i>&nbsp;
 <i class="no-highlight">40</i>&nbsp;    /**
-<i class="no-highlight">41</i>&nbsp;     * Gives information about the game being over, and the winner.
+<i class="no-highlight">41</i>&nbsp;     * Gives information about the application being over, and the winner.
 <i class="no-highlight">42</i>&nbsp;     */
 <i class="no-highlight">43</i>&nbsp;    public void gameOverLogs(){
 <b class="nc"><i class="no-highlight">44</i>&nbsp;        Logger.info(&quot;GAME OVER!&quot;);</b>
@@ -122,7 +122,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">47</i>&nbsp;    }
 <i class="no-highlight">48</i>&nbsp;
 <i class="no-highlight">49</i>&nbsp;    /**
-<i class="no-highlight">50</i>&nbsp;     * Moves an element of the {@link #board} array to a certain direction.
+<i class="no-highlight">50</i>&nbsp;     * Moves an element of the {@link #controller} array to a certain direction.
 <i class="no-highlight">51</i>&nbsp;     * @param i - the row from which the element will be moved from
 <i class="no-highlight">52</i>&nbsp;     * @param j- the column from which the element will be moved from
 <i class="no-highlight">53</i>&nbsp;     * @param d - the direction of the movement
@@ -133,22 +133,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc"><i class="no-highlight">58</i>&nbsp;                int x = i + d.getRowChange();</b>
 <b class="fc"><i class="no-highlight">59</i>&nbsp;                int y = j + d.getColChange();</b>
 <i class="no-highlight">60</i>&nbsp;
-<b class="fc"><i class="no-highlight">61</i>&nbsp;                if(board[i][j] == MyCircle.BLUE){</b>
-<b class="fc"><i class="no-highlight">62</i>&nbsp;                    if (Objects.equals(board[x][y], MyCircle.RED)) {</b>
-<b class="fc"><i class="no-highlight">63</i>&nbsp;                        board[i][j] = MyCircle.NONE;</b>
-<b class="fc"><i class="no-highlight">64</i>&nbsp;                        board[x][y] = MyCircle.BLUE;</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;                if(controller[i][j] == MyCircle.BLUE){</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;                    if (Objects.equals(controller[x][y], MyCircle.RED)) {</b>
+<b class="fc"><i class="no-highlight">63</i>&nbsp;                        controller[i][j] = MyCircle.NONE;</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;                        controller[x][y] = MyCircle.BLUE;</b>
 <b class="fc"><i class="no-highlight">65</i>&nbsp;                        Logger.info(&quot;Moving blue circle at ({}, {}) {}&quot;,i, j, d);</b>
 <i class="no-highlight">66</i>&nbsp;                    }
-<b class="fc"><i class="no-highlight">67</i>&nbsp;                }else if (board[i][j] == MyCircle.RED) {</b>
-<b class="fc"><i class="no-highlight">68</i>&nbsp;                    if (Objects.equals(board[x][y], MyCircle.NONE)){</b>
-<b class="fc"><i class="no-highlight">69</i>&nbsp;                        board[i][j] = MyCircle.NONE;</b>
-<b class="fc"><i class="no-highlight">70</i>&nbsp;                        board[x][y] = MyCircle.RED;</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;                }else if (controller[i][j] == MyCircle.RED) {</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;                    if (Objects.equals(controller[x][y], MyCircle.NONE)){</b>
+<b class="fc"><i class="no-highlight">69</i>&nbsp;                        controller[i][j] = MyCircle.NONE;</b>
+<b class="fc"><i class="no-highlight">70</i>&nbsp;                        controller[x][y] = MyCircle.RED;</b>
 <b class="fc"><i class="no-highlight">71</i>&nbsp;                        Logger.info(&quot;Moving red circle at ({}, {}) {}&quot;,i, j, d);</b>
 <i class="no-highlight">72</i>&nbsp;                    }
 <i class="no-highlight">73</i>&nbsp;                }
 <b class="fc"><i class="no-highlight">74</i>&nbsp;            }else gameOverLogs();</b>
 <b class="nc"><i class="no-highlight">75</i>&nbsp;        } catch (IndexOutOfBoundsException e) {</b>
-<b class="nc"><i class="no-highlight">76</i>&nbsp;            Logger.error(&quot;Stay on board!&quot;);</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;            Logger.error(&quot;Stay on controller!&quot;);</b>
 <b class="fc"><i class="no-highlight">77</i>&nbsp;        }</b>
 <i class="no-highlight">78</i>&nbsp;    }
 <i class="no-highlight">79</i>&nbsp;
@@ -162,7 +162,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">87</i>&nbsp;    }
 <i class="no-highlight">88</i>&nbsp;
 <i class="no-highlight">89</i>&nbsp;    /**
-<i class="no-highlight">90</i>&nbsp;     * Checks if red won the game, using the
+<i class="no-highlight">90</i>&nbsp;     * Checks if red won the application, using the
 <i class="no-highlight">91</i>&nbsp;     * {@link #areAllElementsTheSame(ArrayList)} method.
 <i class="no-highlight">92</i>&nbsp;     * @return true if the rows list or the cols list have the same elements
 <i class="no-highlight">93</i>&nbsp;     */
@@ -171,7 +171,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc"><i class="no-highlight">96</i>&nbsp;        ArrayList&lt;Integer&gt; cols = new ArrayList&lt;&gt;();</b>
 <b class="fc"><i class="no-highlight">97</i>&nbsp;        for (int i = 0; i &lt; BOARD_SIZE; ++i) {</b>
 <b class="fc"><i class="no-highlight">98</i>&nbsp;            for (int j = 0; j &lt; BOARD_SIZE; ++j) {</b>
-<b class="fc"><i class="no-highlight">99</i>&nbsp;                if (board[i][j] != null &amp;&amp; board[i][j] == MyCircle.BLUE){</b>
+<b class="fc"><i class="no-highlight">99</i>&nbsp;                if (controller[i][j] != null &amp;&amp; controller[i][j] == MyCircle.BLUE){</b>
 <b class="fc"><i class="no-highlight">100</i>&nbsp;                    rows.add(i);</b>
 <b class="fc"><i class="no-highlight">101</i>&nbsp;                    cols.add(j);</b>
 <i class="no-highlight">102</i>&nbsp;                }
@@ -184,11 +184,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">109</i>&nbsp;     * Checks if a cell in the grid is empty.
 <i class="no-highlight">110</i>&nbsp;     * @param row - row position of circle
 <i class="no-highlight">111</i>&nbsp;     * @param col - column position of circle
-<i class="no-highlight">112</i>&nbsp;     * @return true if cell is off the board, or if cell is empty.
+<i class="no-highlight">112</i>&nbsp;     * @return true if cell is off the controller, or if cell is empty.
 <i class="no-highlight">113</i>&nbsp;     */
 <i class="no-highlight">114</i>&nbsp;    public boolean isCellEmpty(final int row, final int col) {
 <b class="fc"><i class="no-highlight">115</i>&nbsp;        if (row &lt;= BOARD_SIZE - 1 &amp;&amp; row &gt;= 0 &amp;&amp; col &lt;= BOARD_SIZE - 1 &amp;&amp; col &gt;= 0){</b>
-<b class="fc"><i class="no-highlight">116</i>&nbsp;            return board[row][col] == MyCircle.NONE;</b>
+<b class="fc"><i class="no-highlight">116</i>&nbsp;            return controller[row][col] == MyCircle.NONE;</b>
 <i class="no-highlight">117</i>&nbsp;        }
 <b class="fc"><i class="no-highlight">118</i>&nbsp;        return true;</b>
 <i class="no-highlight">119</i>&nbsp;    }
@@ -202,14 +202,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">127</i>&nbsp;    public boolean canBlueMoveTo(int row, int col){
 <b class="fc"><i class="no-highlight">128</i>&nbsp;        boolean b1 = isCellEmpty(row, col);</b>
 <b class="fc"><i class="no-highlight">129</i>&nbsp;        if(!b1){</b>
-<b class="fc"><i class="no-highlight">130</i>&nbsp;            return board[row][col] != MyCircle.BLUE;</b>
+<b class="fc"><i class="no-highlight">130</i>&nbsp;            return controller[row][col] != MyCircle.BLUE;</b>
 <i class="no-highlight">131</i>&nbsp;        }
 <b class="fc"><i class="no-highlight">132</i>&nbsp;        return false;</b>
 <i class="no-highlight">133</i>&nbsp;    }
 <i class="no-highlight">134</i>&nbsp;
 <i class="no-highlight">135</i>&nbsp;    /**
 <i class="no-highlight">136</i>&nbsp;     * Checks if blue player won using {@link #canBlueMoveTo(int, int)}
-<i class="no-highlight">137</i>&nbsp;     * method on each blue circle on board.
+<i class="no-highlight">137</i>&nbsp;     * method on each blue circle on controller.
 <i class="no-highlight">138</i>&nbsp;     * @return true if all neighbouring cells are empty,
 <i class="no-highlight">139</i>&nbsp;     * or contain a blue circle
 <i class="no-highlight">140</i>&nbsp;     */
@@ -217,7 +217,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc"><i class="no-highlight">142</i>&nbsp;        int sum = 0;</b>
 <b class="fc"><i class="no-highlight">143</i>&nbsp;        for (int i = 0; i &lt; BOARD_SIZE; ++i) {</b>
 <b class="fc"><i class="no-highlight">144</i>&nbsp;            for (int j = 0; j &lt; BOARD_SIZE; ++j) {</b>
-<b class="fc"><i class="no-highlight">145</i>&nbsp;                if (board[i][j] != null &amp;&amp; board[i][j] == MyCircle.BLUE) {</b>
+<b class="fc"><i class="no-highlight">145</i>&nbsp;                if (controller[i][j] != null &amp;&amp; controller[i][j] == MyCircle.BLUE) {</b>
 <b class="fc"><i class="no-highlight">146</i>&nbsp;                    boolean b1 = canBlueMoveTo(i + 1, j);</b>
 <b class="fc"><i class="no-highlight">147</i>&nbsp;                    boolean b2 = canBlueMoveTo(i - 1, j);</b>
 <b class="fc"><i class="no-highlight">148</i>&nbsp;                    boolean b3 = canBlueMoveTo(i, j - 1);</b>
@@ -230,7 +230,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">155</i>&nbsp;    }
 <i class="no-highlight">156</i>&nbsp;
 <i class="no-highlight">157</i>&nbsp;    /**
-<i class="no-highlight">158</i>&nbsp;     * Checks if game is over.
+<i class="no-highlight">158</i>&nbsp;     * Checks if application is over.
 <i class="no-highlight">159</i>&nbsp;     * @return true if either of the players have won.
 <i class="no-highlight">160</i>&nbsp;     */
 <i class="no-highlight">161</i>&nbsp;    public boolean isGameOver(){
@@ -245,7 +245,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc"><i class="no-highlight">170</i>&nbsp;        StringBuilder sb = new StringBuilder();</b>
 <b class="fc"><i class="no-highlight">171</i>&nbsp;        for (var i = 0; i &lt; BOARD_SIZE; i++) {</b>
 <b class="fc"><i class="no-highlight">172</i>&nbsp;            for (var j = 0; j &lt; BOARD_SIZE; j++) {</b>
-<b class="fc"><i class="no-highlight">173</i>&nbsp;                sb.append(board[i][j].name()).append(&#39; &#39;);</b>
+<b class="fc"><i class="no-highlight">173</i>&nbsp;                sb.append(controller[i][j].name()).append(&#39; &#39;);</b>
 <i class="no-highlight">174</i>&nbsp;            }
 <b class="fc"><i class="no-highlight">175</i>&nbsp;            sb.append(&#39;\n&#39;);</b>
 <i class="no-highlight">176</i>&nbsp;        }

@@ -17,10 +17,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">board</a>
+    <a href="../index.html">controller</a>
 </div>
 
-<h1>Coverage Summary for Class: MovingPieces (board)</h1>
+<h1>Coverage Summary for Class: MovingPieces (controller)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -73,18 +73,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package board;
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package controller;
 <i class="no-highlight">2</i>&nbsp;
 <i class="no-highlight">3</i>&nbsp;import javafx.collections.ObservableList;
 <i class="no-highlight">4</i>&nbsp;import javafx.scene.Node;
 <i class="no-highlight">5</i>&nbsp;import javafx.scene.layout.GridPane;
 <i class="no-highlight">6</i>&nbsp;import javafx.scene.paint.Color;
 <i class="no-highlight">7</i>&nbsp;import javafx.scene.shape.Circle;
-<i class="no-highlight">8</i>&nbsp;import model.MyCircle;
+<i class="no-highlight">8</i>&nbsp;import enums.MyCircle;
 <i class="no-highlight">9</i>&nbsp;import org.tinylog.Logger;
-<i class="no-highlight">10</i>&nbsp;import model.Direction;
+<i class="no-highlight">10</i>&nbsp;import enums.Direction;
 <i class="no-highlight">11</i>&nbsp;
-<i class="no-highlight">12</i>&nbsp;import static board.GameController.*;
+<i class="no-highlight">12</i>&nbsp;import static controller.GameController.*;
 <i class="no-highlight">13</i>&nbsp;
 <i class="no-highlight">14</i>&nbsp;public class MovingPieces{
 <i class="no-highlight">15</i>&nbsp;

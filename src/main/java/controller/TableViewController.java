@@ -1,5 +1,7 @@
-package Data;
+package controller;
 
+import data.Winner;
+import data.WinnerRepo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

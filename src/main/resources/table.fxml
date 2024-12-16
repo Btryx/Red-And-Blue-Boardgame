@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18"
-           xmlns:fx="http://javafx.com/fxml/1" fx:controller="Data.TableViewController">
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TableViewController">
     <children>
         <TableView fx:id="tableView">
             <columns>

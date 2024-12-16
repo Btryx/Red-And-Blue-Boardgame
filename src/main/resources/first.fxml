@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="board.SecondController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OpeningSceneController">
    <children>
       <Button layoutX="229.0" layoutY="279.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="34.0" prefWidth="142.0" text="START GAME" />
       <TextField fx:id="firstPlayer" layoutX="52.0" layoutY="175.0" prefHeight="25.0" prefWidth="214.0" />

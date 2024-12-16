@@ -1,6 +1,6 @@
 # A boardgame made with javaFX for my second semester subject: Software development in practice
-## The game
-## There are 22 red, and 3 blue pieces on the 5x5 sized board. One player moves with red, the other, with blue. The blue player begins the game.
+## The application
+## There are 22 red, and 3 blue pieces on the 5x5 sized controller. One player moves with red, the other, with blue. The blue player begins the application.
 ## Every step consists of moving one piece.
 
 1. The red player can only move to a neighbouring field
