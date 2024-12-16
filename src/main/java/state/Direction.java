@@ -1,4 +1,4 @@
-package enums;
+package state;
 
 /**
  * Represents the four main directions.

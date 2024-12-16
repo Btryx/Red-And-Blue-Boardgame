@@ -1,7 +1,7 @@
 package controller;
 
 import data.Winner;
-import data.WinnerRepo;
+import data.WinnerRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class TableViewController {
+public class LeaderBoardController {
 
     @FXML
     private TableView<Winner> tableView;
@@ -34,9 +34,9 @@ public class TableViewController {
         color.setCellValueFactory(new PropertyValueFactory<>("winnerColor"));
         moves.setCellValueFactory(new PropertyValueFactory<>("winnerMoves"));
 
-        var repo = new WinnerRepo();
+        var repo = new WinnerRepository();
         repo.loadFromFile(new File("winners.json"));
-        List<Winner> winners = repo.topTen();
+        List<Winner> winners = repo.getTopTenWinners();
 
         ObservableList<Winner> observableList = FXCollections.observableArrayList();
         observableList.addAll(winners);

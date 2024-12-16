@@ -1,6 +1,6 @@
 
-import model.GameModel;
-import enums.MyCircle;
+import model.BoardModel;
+import state.MyCircle;
 import org.junit.jupiter.api.Test;
 import service.GameService;
 
@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GameModelTest2 {
+public class BoardModelTest2 {
 
-    GameModel model = new GameModel();
+    BoardModel model = new BoardModel();
     private final GameService gameService = new GameService(model);
 
     @Test

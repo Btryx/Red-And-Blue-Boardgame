@@ -1,14 +1,14 @@
-import model.GameModel;
-import enums.MyCircle;
+import model.BoardModel;
+import state.MyCircle;
 import org.junit.jupiter.api.Test;
-import enums.Direction;
+import state.Direction;
 import service.GameService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameModelTest {
+public class BoardModelTest {
 
-    GameModel model = new GameModel();
+    BoardModel model = new BoardModel();
     private final GameService gameService = new GameService(model);
 
     @Test

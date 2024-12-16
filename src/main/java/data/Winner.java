@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Class for representing the winner of the game.
+ * Represents a winner in a game.
  */
 @Data
 @AllArgsConstructor

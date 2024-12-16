@@ -1,4 +1,4 @@
-package enums;
+package state;
 
 /**
  * Represents the color of elements on the board.
