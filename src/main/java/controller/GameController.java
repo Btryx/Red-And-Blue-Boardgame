@@ -25,7 +25,6 @@ import org.tinylog.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 import data.Winner;
 import service.GameService;
 
@@ -42,65 +41,226 @@ public class GameController {
     public TextField text;
     public Button exitButton;
 
-    public static int row;
-    public static int col;
-    public static Circle selectedCircle;
-    public static boolean blueTurn = true;
-    public static boolean isSomethingSelected = false;
-
-    int countBlueMoves = 0;
-    int countRedMoves = 0;
-
-    private static final StringProperty name = new SimpleStringProperty();
-    private static final StringProperty name2 = new SimpleStringProperty();
+    // Static Fields for Game State
+    private static int row;
+    private static int col;
+    private static Circle selectedCircle;
+    private static boolean blueTurn = true;
+    private static boolean isSomethingSelected = false;
+    private static final StringProperty blueName = new SimpleStringProperty();
+    private static final StringProperty redName = new SimpleStringProperty();
     private static String winnerName;
     private static String winnerColor;
     private static int countWinnerMoves;
 
-
-    public static String getName1() {
-        return name.get();
+    public static void setBlueName(String blueName) {
+        GameController.blueName.set(blueName);
     }
 
-    public static String getName2() {
-        return name2.get();
+    public static void setRedName(String redName) {
+        GameController.redName.set(redName);
     }
 
-    public static String getWinnerName() {
-        return winnerName;
-    }
-
-    public static void setWinnerName(String winnerName) {
-        GameController.winnerName = winnerName;
-    }
-
-    public static String getWinnerColor() {
-        return winnerColor;
-    }
-
-    public static void setWinnerColor(String winnerColor) {
-        GameController.winnerColor = winnerColor;
-    }
-
-    public static int getCountWinnerMoves() {
-        return countWinnerMoves;
-    }
-
-    public static void setCountWinnerMoves(int countWinnerMoves) {
-        GameController.countWinnerMoves = countWinnerMoves;
-    }
-
-    public void setName1(String name) {
-        GameController.name.set(name);
-    }
-
-    public void setName2(String name) {
-        name2.set(name);
-    }
-
+    // Instance Fields
+    private int countBlueMoves = 0;
+    private int countRedMoves = 0;
     private final GameModel model = new GameModel();
     private final GameService gameService = new GameService(model);
 
+    /**
+     * Initialize the board and UI state.
+     */
+    @FXML
+    public void initialize(){
+        leaderboard.setVisible(false);
+        populateBoard();
+    }
+
+    /**
+     * Populate the board with circles based on the model.
+     */
+    private void populateBoard() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                Color color = model.getBoard()[i][j] == MyCircle.BLUE ? Color.BLUE : Color.RED;
+                Circle circle = createCircle(color);
+                grid.add(circle, j, i);
+            }
+        }
+    }
+
+    /**
+     * Creates a circle with the specified color and sets up event handling.
+     * @param color The color of the circle.
+     * @return The created circle.
+     */
+    private Circle createCircle(Color color) {
+        var circle = new Circle(30);
+        circle.setFill(color);
+        if(color == Color.RED) circle.setOnMouseClicked(this::selectRedCircle);
+        else circle.setOnMouseClicked(this::selectBlueCircle);
+        return circle;
+    }
+
+    /**
+     * Handle selection of a blue circle.
+     */
+    public void selectBlueCircle(MouseEvent e) {
+        handleSelection(e, Color.LIGHTBLUE, Color.BLUE, blueTurn);
+    }
+
+    /**
+     * Handle selection of a red circle.
+     */
+    public void selectRedCircle(MouseEvent e) {
+        handleSelection(e, Color.PINK, Color.RED, !blueTurn);
+    }
+
+    private void handleSelection(MouseEvent e, Color highlight, Color original, boolean isTurn) {
+        if (!gameService.isGameOver() && isTurn) {
+            if (isSomethingSelected) {
+                selectedCircle.setFill(original);
+            }
+            selection(e, highlight);
+        }
+    }
+
+    /**
+     * Set the selected circle and update the UI.
+     */
+    public void selection(MouseEvent e, Color color){
+        isSomethingSelected = true;
+        selectedCircle = (Circle) e.getSource();
+        row = GridPane.getRowIndex(selectedCircle);
+        col = GridPane.getColumnIndex(selectedCircle);
+        Logger.debug("Click on square (" + row + ", " + col + ")");
+        selectedCircle.setFill(color);
+    }
+
+    public boolean isFileEmpty(File file){
+        return file.length() == 0;
+    }
+
+    public void makeWinner() throws IOException {
+        var repo = new WinnerRepo();
+        if(!isFileEmpty(new File("winners.json"))){
+            repo.loadFromFile(new File("winners.json"));
+        }
+        var winner = Winner.builder()
+                .winnerName(winnerName)
+                .winnerColor(winnerColor)
+                .winnerMoves(countWinnerMoves)
+                .build();
+        repo.add(winner);
+        repo.saveToFile(new File("winners.json"));
+    }
+
+    public String changeTurnText(){
+        return blueTurn ? blueName.get() + "'s turn!" :
+                redName.get() + "'s turn!";
+    }
+
+    public void handleGameOver() throws IOException{
+        if(gameService.isGameOver()){
+            Logger.debug("Game Over!");
+            if(gameService.redWon()) {
+                Logger.debug("Red Won!!");
+                text.setText(redName.get() + " won!");
+                winnerName = redName.get();
+                winnerColor = "Red";
+                countWinnerMoves = countRedMoves;
+            }
+            else {
+                Logger.debug("Blue Won!!");
+                text.setText(blueName.get() + " won!");
+                winnerName = blueName.get();
+                winnerColor = "Blue";
+                countWinnerMoves = countBlueMoves;
+
+            }
+            makeWinner();
+            upButton.setDisable(true);
+            downButton.setDisable(true);
+            rightButton.setDisable(true);
+            leftButton.setDisable(true);
+            leaderboard.setVisible(true);
+        }
+    }
+
+    /**
+     * Checks if it's blue's turn to move.
+     */
+    boolean shouldBlueMove(){
+        return blueTurn && isSomethingSelected;
+    }
+
+    /**
+     * Checks if it's red's turn to move.
+     */
+    boolean shouldRedMove(){
+        return !blueTurn && isSomethingSelected;
+    }
+
+
+    /**
+     * Removes a node from the grid by its row and column index.
+     */
+    public void removeNodeByRowColumnIndex(final int row,final int column) {
+        ObservableList<Node> children = grid.getChildren();
+        for(Node node : children) {
+            if(node instanceof Circle && GridPane.getRowIndex(node) == row
+                    && GridPane.getColumnIndex(node) == column) {
+                Circle circle = (Circle) node;
+                grid.getChildren().remove(circle);
+                break;
+            }
+        }
+    }
+
+    private void updateBoardState(int newRow, int newCol, Color color) {
+        grid.getChildren().remove(selectedCircle);
+        removeNodeByRowColumnIndex(newRow, newCol);
+        grid.add(selectedCircle, newCol, newRow);
+        selectedCircle.setFill(color);
+        isSomethingSelected = false;
+    }
+
+    /**
+     * Updates the UI to reflect a move.
+     */
+    public void updateUIAfterMove(Direction direction, MyCircle[][] model){
+        try {
+            int newRow = row + direction.getRowChange();
+            int newCol = col + direction.getColChange();
+            if (shouldBlueMove() && model[newRow][newCol] == MyCircle.RED) {
+                updateBoardState(newRow, newCol, Color.BLUE);
+                blueTurn = false;
+                countBlueMoves++;
+            }else if (shouldRedMove() && model[newRow][newCol] == MyCircle.NONE) {
+                updateBoardState(newRow, newCol, Color.RED);
+                blueTurn = true;
+                countRedMoves++;
+            }
+            else{
+                Logger.warn("Not valid move!");
+            }
+            Logger.info("Red move count: "+ countRedMoves);
+            Logger.info("Blue move count: "+ countBlueMoves);
+        } catch (IndexOutOfBoundsException ex) {
+            Logger.error("Not valid move. Try again.");
+        }
+    }
+
+    /**
+     * Performs the move and handles post-move actions.
+     */
+    private void performMove(Direction direction) throws IOException{
+        updateUIAfterMove(direction, model.getBoard());
+        gameService.makeMove(row, col, direction);
+        text.setText(changeTurnText());
+        Logger.debug("\n"+model);
+        handleGameOver();
+    }
 
     @FXML
     private void up() throws IOException{
@@ -141,179 +301,5 @@ public class GameController {
         stage.centerOnScreen();
         stage.show();
         Logger.debug("Switching to leaderboard...");
-    }
-
-    @FXML
-    public void initialize(){
-        text.setEditable(false);
-        Logger.debug("\n"+model);
-        leaderboard.setVisible(false);
-        populateBoard();
-    }
-
-    private void performMove(Direction direction) throws IOException{
-        moveBoardPieces(direction, model.getBoard());
-        gameService.makeMove(row, col, direction);
-        text.setText(changeTurnText());
-        Logger.debug("\n"+model);
-        handleGameOver();
-    }
-
-
-    private void populateBoard(){
-        Circle c;
-        for(int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if(Objects.equals(model.getBoard()[i][j], MyCircle.BLUE)){
-                    c = createCircle(Color.BLUE);
-                }else {
-                    c = createCircle(Color.RED);
-                }
-                grid.add(c, j, i);
-            }
-        }
-    }
-
-    private Circle createCircle(Color color) {
-        var circle = new Circle(30);
-        circle.setFill(color);
-        if(color == Color.RED) circle.setOnMouseClicked(this::selectRedCircle);
-        else circle.setOnMouseClicked(this::selectBlueCircle);
-        return circle;
-    }
-
-    public void selectBlueCircle(MouseEvent e){
-        if(!gameService.isGameOver() && blueTurn && !isSomethingSelected) {
-            selection(e, Color.LIGHTBLUE);
-        }else if(!gameService.isGameOver() && blueTurn && isSomethingSelected) {
-            selectedCircle.setFill(Color.BLUE);
-            selection(e, Color.LIGHTBLUE);
-        }
-    }
-
-    public void selectRedCircle(MouseEvent e){
-        if(!gameService.isGameOver() && !blueTurn && !isSomethingSelected) {
-            selection(e, Color.PINK);
-        }else if(!gameService.isGameOver() && !blueTurn && isSomethingSelected) {
-            selectedCircle.setFill(Color.RED);
-            selection(e, Color.PINK);
-        }
-    }
-
-    public void selection(MouseEvent e, Color color){
-        isSomethingSelected = true;
-        selectedCircle = (Circle) e.getSource();
-        row = GridPane.getRowIndex(selectedCircle);
-        col = GridPane.getColumnIndex(selectedCircle);
-        Logger.debug("Click on square (" + row + ", " + col + ")");
-        selectedCircle.setFill(color);
-    }
-
-    public boolean isFileEmpty(File file){
-        return file.length() == 0;
-    }
-
-    public void makeWinner() throws IOException {
-        var repo = new WinnerRepo();
-        if(!isFileEmpty(new File("winners.json"))){
-            repo.loadFromFile(new File("winners.json"));
-        }
-        var winner = Winner.builder()
-                .winnerName(getWinnerName())
-                .winnerColor(getWinnerColor())
-                .winnerMoves(getCountWinnerMoves())
-                .build();
-        repo.add(winner);
-        repo.saveToFile(new File("winners.json"));
-    }
-
-    public String changeTurnText(){
-        return blueTurn ? GameController.getName1() + "'s turn!" :
-                GameController.getName2() + "'s turn!";
-    }
-
-    public void handleGameOver() throws IOException{
-        if(gameService.isGameOver()){
-            Logger.debug("Game Over!");
-            if(gameService.redWon()) {
-                Logger.debug("Red Won!!");
-                text.setText(GameController.getName2() + " won!");
-                setWinnerName(GameController.getName2());
-                setWinnerColor("Red");
-                setCountWinnerMoves(countRedMoves);
-            }
-            else {
-                Logger.debug("Blue Won!!");
-                text.setText(GameController.getName1() + " won!");
-                setWinnerName(GameController.getName1());
-                setWinnerColor("Blue");
-                setCountWinnerMoves(countBlueMoves);
-
-            }
-            makeWinner();
-            upButton.setDisable(true);
-            downButton.setDisable(true);
-            rightButton.setDisable(true);
-            leftButton.setDisable(true);
-            leaderboard.setVisible(true);
-        }
-    }
-
-    boolean shouldBlueMove(){
-        return blueTurn && isSomethingSelected;
-    }
-    boolean shouldRedMove(){
-        return !blueTurn && isSomethingSelected;
-    }
-
-
-    public void removeNodeByRowColumnIndex(final int row,final int column) {
-        ObservableList<Node> children = grid.getChildren();
-        for(Node node : children) {
-            if(node instanceof Circle && GridPane.getRowIndex(node) == row
-                    && GridPane.getColumnIndex(node) == column) {
-                Circle circle = (Circle) node;
-                grid.getChildren().remove(circle);
-                break;
-            }
-        }
-    }
-
-    private void movingBlue(int coord1, int coord2){
-        grid.getChildren().remove(selectedCircle);
-        removeNodeByRowColumnIndex(coord1, coord2);
-        grid.add(selectedCircle, coord2, coord1);
-        selectedCircle.setFill(Color.BLUE);
-        blueTurn = false;
-        countBlueMoves++;
-        isSomethingSelected = false;
-    }
-
-    private void movingRed(int coord1, int coord2){
-        grid.getChildren().remove(selectedCircle);
-        grid.add(selectedCircle, coord2, coord1);
-        selectedCircle.setFill(Color.RED);
-        blueTurn = true;
-        countRedMoves++;
-        isSomethingSelected = false;
-    }
-
-    public void moveBoardPieces(Direction direction, MyCircle[][] model){
-        try {
-            int getRow = row + direction.getRowChange();
-            int getCol = col + direction.getColChange();
-            if (shouldBlueMove() && model[getRow][getCol] == MyCircle.RED) {
-                movingBlue(getRow, getCol);
-            }else if (shouldRedMove() && model[getRow][getCol] == MyCircle.NONE) {
-                movingRed(getRow, getCol);
-            }
-            else{
-                Logger.warn("Not valid move!");
-            }
-            Logger.info("Red move count: "+ countRedMoves);
-            Logger.info("Blue move count: "+ countBlueMoves);
-        } catch (IndexOutOfBoundsException ex) {
-            Logger.error("Not valid move. Try again.");
-        }
     }
 }

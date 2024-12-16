@@ -3,5 +3,10 @@
     "winnerName": "Player Red",
     "winnerColor": "Red",
     "winnerMoves": 3
+  },
+  {
+    "winnerName": "Player Red",
+    "winnerColor": "Red",
+    "winnerMoves": 6
   }
 ]

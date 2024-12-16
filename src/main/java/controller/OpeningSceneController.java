@@ -32,9 +32,9 @@ public class OpeningSceneController {
     private void switchScene(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui.fxml"));
         Parent root = fxmlLoader.load();
-        GameController controller = fxmlLoader.getController();
-        controller.setName1(firstPlayer.getText());
-        controller.setName2(secondPlayer.getText());
+
+        GameController.setBlueName(firstPlayer.getText());
+        GameController.setRedName(secondPlayer.getText());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
