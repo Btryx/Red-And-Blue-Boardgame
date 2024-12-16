@@ -160,31 +160,26 @@ public class GameController {
                 redName.get() + "'s turn!";
     }
 
-    public void handleGameOver() throws IOException{
-        if(gameService.isGameOver()){
-            Logger.debug("Game Over!");
-            if(gameService.redWon()) {
-                Logger.debug("Red Won!!");
-                text.setText(redName.get() + " won!");
-                winnerName = redName.get();
-                winnerColor = "Red";
-                countWinnerMoves = countRedMoves;
-            }
-            else {
-                Logger.debug("Blue Won!!");
-                text.setText(blueName.get() + " won!");
-                winnerName = blueName.get();
-                winnerColor = "Blue";
-                countWinnerMoves = countBlueMoves;
+    public void handleGameOver() throws IOException {
+        if (!gameService.isGameOver()) return;
 
-            }
-            makeWinner();
-            upButton.setDisable(true);
-            downButton.setDisable(true);
-            rightButton.setDisable(true);
-            leftButton.setDisable(true);
-            leaderboard.setVisible(true);
-        }
+        Logger.debug("Game Over!");
+        boolean redWon = gameService.redWon();
+        winnerName = redWon ? redName.get() : blueName.get();
+        winnerColor = redWon ? "Red" : "Blue";
+        countWinnerMoves = redWon ? countRedMoves : countBlueMoves;
+
+        text.setText(winnerName + " won!");
+        makeWinner();
+        disableControls();
+        leaderboard.setVisible(true);
+    }
+
+    private void disableControls() {
+        upButton.setDisable(true);
+        downButton.setDisable(true);
+        rightButton.setDisable(true);
+        leftButton.setDisable(true);
     }
 
     /**

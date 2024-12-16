@@ -13,6 +13,12 @@ import javafx.scene.control.TextField;
 
 public class OpeningSceneController {
 
+    private static final String DEFAULT_BLUE_NAME = "Player Blue";
+    private static final String DEFAULT_RED_NAME = "Player Red";
+    private static final String BLUE_PROMPT = "Enter the name of the blue player";
+    private static final String RED_PROMPT = "Enter the name of the red player";
+    private static final String GAME_SCENE_PATH = "/ui.fxml";
+
     @FXML
     public TextField secondPlayer;
     @FXML
@@ -20,12 +26,10 @@ public class OpeningSceneController {
 
     @FXML
     private void initialize() {
-        firstPlayer.setPromptText("Enter the name of the blue player");
-        secondPlayer.setPromptText("Enter the name of the red player");
-        firstPlayer.setText(System.getProperty("user.name.1"));
-        secondPlayer.setText(System.getProperty("user.name.2"));
-        firstPlayer.setText("Player Blue");
-        secondPlayer.setText("Player Red");
+        firstPlayer.setPromptText(BLUE_PROMPT);
+        secondPlayer.setPromptText(RED_PROMPT);
+        firstPlayer.setText(System.getProperty("user.name.1", DEFAULT_BLUE_NAME));
+        secondPlayer.setText(System.getProperty("user.name.2", DEFAULT_RED_NAME));
     }
 
     @FXML

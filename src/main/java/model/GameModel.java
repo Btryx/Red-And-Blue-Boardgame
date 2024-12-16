@@ -21,8 +21,7 @@ public class GameModel {
      * Represents the board in a 2D array.
      */
     private final MyCircle[][] board;
-
-
+    
     public GameModel() {
         board = new MyCircle[BOARD_SIZE][BOARD_SIZE];
         initializeBoard();
