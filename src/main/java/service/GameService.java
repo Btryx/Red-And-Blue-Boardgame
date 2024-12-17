@@ -161,14 +161,16 @@ public class GameService {
 
     /**
      * Makes a move on the board if the game is not over.
+     *
      * @param newRow Ending row of the move
      * @param newCol Ending column of the move
      */
-    public void makeMove(int newRow, int newCol) {
+    public void makeMove(int newRow, int newCol, boolean blueMove) {
         if (!isGameOver()) {
             Direction direction = getDirection(gameState.getRow(), gameState.getCol(), newRow, newCol);
-            gameState.move(gameState.getRow(), gameState.getCol(), direction);
+            gameState.move(gameState.getRow(), gameState.getCol(), direction, blueMove);
             deselectPreviousCircle();
+            turnChange(!blueMove);
         }
     }
 

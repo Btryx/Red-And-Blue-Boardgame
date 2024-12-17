@@ -100,12 +100,12 @@ public class GameState {
     /**
      * Moves a piece on the board in the specified direction.
      *
-     * @param row Row of the piece to move
-     * @param col Column of the piece to move
+     * @param row       Row of the piece to move
+     * @param col       Column of the piece to move
      * @param direction Direction of movement
      * @throws IllegalArgumentException if move is invalid
      */
-    public void move(int row, int col, Direction direction) {
+    public void move(int row, int col, Direction direction, boolean blueMove) {
         // Validate input
         if (!isWithinBounds(row, col)) {
             throw new IllegalArgumentException("Invalid starting position");
@@ -121,17 +121,15 @@ public class GameState {
 
         // Validate new position
         if (!isWithinBounds(newRow, newCol)) {
-            Logger.error("Move out of board bounds");
+            Logger.warn("Move out of board bounds");
             return;
         }
 
         // Perform move based on piece type
-        if (currentPiece == MyCircle.BLUE && getPieceAt(newRow, newCol) == MyCircle.RED) {
+        if (blueMove) {
             performBlueMove(row, col, newRow, newCol);
-        } else if (currentPiece == MyCircle.RED && getPieceAt(newRow, newCol) == MyCircle.NONE) {
-            performRedMove(row, col, newRow, newCol);
         } else {
-            Logger.warn("Invalid move attempted");
+            performRedMove(row, col, newRow, newCol);
         }
     }
 
@@ -153,11 +151,29 @@ public class GameState {
         Logger.info("Moving red circle from ({}, {}) to ({}, {})", oldRow, oldCol, newRow, newCol);
     }
 
+    /**
+     * Increases the count for movements the blue player made
+     */
     public void incrementBlueMoves() {
         countBlueMoves++;
     }
 
+    /**
+     * Increases the count for movements the red player made
+     */
     public void incrementRedMoves() {
         countRedMoves++;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (MyCircle[] row : board) {
+            for (MyCircle circle : row) {
+                sb.append(circle.name()).append(' ');
+            }
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 }

@@ -13,11 +13,11 @@ public class BoardModelTest {
 
     @Test
     void moveTest(){
-        gameState.move(2, 2, Direction.UP);
+        gameState.move(2, 2, Direction.UP, true);
         if(!gameService.isGameOver()) {
             assertEquals(gameState.getBoard()[2][2], MyCircle.NONE);
             assertEquals(gameState.getBoard()[1][2], MyCircle.BLUE);
-            gameState.move(3, 2, Direction.UP);
+            gameState.move(3, 2, Direction.UP, false);
             assertEquals(gameState.getBoard()[3][2], MyCircle.NONE);
             assertEquals(gameState.getBoard()[2][2], MyCircle.RED);
         }else{

@@ -52,32 +52,29 @@ public class WinnerService {
     }
 
     /**
+     * Checks is fie has not content
+     */
+    private boolean isFileEmpty(File file) {
+        return file.length() == 0;
+    }
+
+    /**
      * Saves winners to a file.
-     *
-     * @param filePath the path to the file where winners will be saved
      */
-    public void saveWinnersToFile(File filePath) {
-        try {
-            winnerRepository.saveToFile(filePath);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save winners to file: " + filePath, e);
+    public void saveWinner(String winnerName, String winnerColor, int winnerMoves) throws IOException {
+        File winnerFile = new File("winners.json");
+        if (!isFileEmpty(winnerFile)) {
+            loadWinnersFromFile(winnerFile);
         }
-    }
 
-    /**
-     * Checks if the winner repository is empty.
-     *
-     * @return true if the repository is empty, false otherwise
-     */
-    public boolean isRepositoryEmpty() {
-        return winnerRepository.getElements().isEmpty();
-    }
+        Winner winner = Winner.builder()
+                .winnerName(winnerName)
+                .winnerColor(winnerColor)
+                .winnerMoves(winnerMoves)
+                .build();
 
-    /**
-     * Clears all winners from the repository.
-     */
-    public void clearWinners() {
-        winnerRepository.clear();
+        addWinner(winner);
+        winnerRepository.saveToFile(winnerFile);
     }
 }
 

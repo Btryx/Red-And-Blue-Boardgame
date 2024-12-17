@@ -8,9 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import service.WinnerService;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class LeaderBoardController {
@@ -28,15 +28,14 @@ public class LeaderBoardController {
     private TableColumn<Winner, Integer> moves;
 
     @FXML
-    private void initialize() throws IOException {
-
+    private void initialize() {
         name.setCellValueFactory(new PropertyValueFactory<>("winnerName"));
         color.setCellValueFactory(new PropertyValueFactory<>("winnerColor"));
         moves.setCellValueFactory(new PropertyValueFactory<>("winnerMoves"));
 
-        var repo = new WinnerRepository();
-        repo.loadFromFile(new File("winners.json"));
-        List<Winner> winners = repo.getTopTenWinners();
+        var winnerService = new WinnerService(new WinnerRepository());
+        winnerService.loadWinnersFromFile(new File("winners.json"));
+        List<Winner> winners = winnerService.getTopTenWinners();
 
         ObservableList<Winner> observableList = FXCollections.observableArrayList();
         observableList.addAll(winners);

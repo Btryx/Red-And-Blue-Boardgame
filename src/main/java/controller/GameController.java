@@ -1,6 +1,5 @@
 package controller;
 
-import data.Winner;
 import data.WinnerRepository;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,15 +23,18 @@ import service.GameService;
 import service.WinnerService;
 import state.GameState;
 
-import java.io.File;
 import java.io.IOException;
+
 import static state.GameState.BOARD_SIZE;
 
 public class GameController {
     // UI Components
-    @FXML private GridPane grid;
-    @FXML private Button leaderboard;
-    @FXML private TextField turnText;
+    @FXML
+    private GridPane grid;
+    @FXML
+    private Button leaderboard;
+    @FXML
+    private TextField turnText;
 
     // Game State Management
     private final GameService gameService;
@@ -64,7 +66,7 @@ public class GameController {
     private void populateBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                Color color = gameService.isPieceBlue(i,j) ? Color.BLUE : Color.RED;
+                Color color = gameService.isPieceBlue(i, j) ? Color.BLUE : Color.RED;
                 Circle circle = createCircle(color);
                 grid.add(circle, j, i);
             }
@@ -97,7 +99,6 @@ public class GameController {
             return;
         }
 
-        Logger.debug("Mouse clicked at (" + mouseX + ", " + mouseY + ")");
         Logger.debug("Calculated cell: (" + newRow + ", " + newCol + ")");
 
         // Case 1: Attempting to select a piece
@@ -156,33 +157,30 @@ public class GameController {
     }
 
     private void moveBlue(Circle selectedCircle, int newRow, int newCol) {
-        updateGrid(selectedCircle, newRow, newCol, Color.BLUE);
-        gameService.turnChange(false);
-        gameService.makeMove(newRow, newCol);
-        turnText.setText(getCurrentPlayerTurnText());
+        gameService.makeMove(newRow, newCol, true);
+        updateUI(selectedCircle, newRow, newCol, Color.BLUE);
         handleGameOver();
     }
 
     private void moveRed(Circle selectedCircle, int newRow, int newCol) {
-        updateGrid(selectedCircle, newRow, newCol, Color.RED);
-        gameService.turnChange(true);
-        gameService.makeMove(newRow, newCol);
-        turnText.setText(getCurrentPlayerTurnText());
+        gameService.makeMove(newRow, newCol, false);
+        updateUI(selectedCircle, newRow, newCol, Color.RED);
         handleGameOver();
     }
 
-    private void updateGrid(Circle selectedCircle, int newRow, int newCol, Color color) {
+    private void updateUI(Circle selectedCircle, int newRow, int newCol, Color color) {
         grid.getChildren().remove(selectedCircle);
         removeNodeByRowColumnIndex(newRow, newCol);
         grid.add(selectedCircle, newCol, newRow);
         selectedCircle.setFill(color);
         gameService.resetSelection();
+        turnText.setText(getCurrentPlayerTurnText());
     }
 
-    public void removeNodeByRowColumnIndex(final int row,final int column) {
+    public void removeNodeByRowColumnIndex(final int row, final int column) {
         ObservableList<Node> children = grid.getChildren();
-        for(Node node : children) {
-            if(node instanceof Circle && GridPane.getRowIndex(node) == row
+        for (Node node : children) {
+            if (node instanceof Circle && GridPane.getRowIndex(node) == row
                     && GridPane.getColumnIndex(node) == column) {
                 Circle circle = (Circle) node;
                 grid.getChildren().remove(circle);
@@ -215,33 +213,16 @@ public class GameController {
     }
 
     private void saveWinner(String winnerName, String winnerColor, int winnerMoves) throws IOException {
-        File winnerFile = new File("winners.json");
-        if (!isFileEmpty(winnerFile)) {
-            winnerService.loadWinnersFromFile(winnerFile);
+        try {
+            winnerService.saveWinner(winnerName, winnerColor, winnerMoves);
+        } catch (IOException e) {
+            Logger.warn("Couldn't save to file");
         }
 
-        Winner winner = Winner.builder()
-                .winnerName(winnerName)
-                .winnerColor(winnerColor)
-                .winnerMoves(winnerMoves)
-                .build();
-
-        winnerService.addWinner(winner);
-        winnerService.saveWinnersToFile(winnerFile);
-    }
-
-    private boolean isFileEmpty(File file) {
-        return file.length() == 0;
     }
 
     @FXML
-    private void exit() {
-        Logger.debug("Exiting...");
-        Platform.exit();
-    }
-
-    @FXML
-    private void switchToTable(ActionEvent event) throws IOException {
+    private void switchToLeaderBoard(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/table.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -250,4 +231,11 @@ public class GameController {
         stage.show();
         Logger.debug("Switching to leaderboard...");
     }
+
+    @FXML
+    private void exit() {
+        Logger.debug("Exiting...");
+        Platform.exit();
+    }
 }
+
