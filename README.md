@@ -1,4 +1,4 @@
-# Red And Blue BoardGame
+# Red And Blue Board Game
 A boardgame made with javaFX for my second semester subject: Software development in practice
 ## 🎮 How to Play
 There are 22 red, and 3 blue pieces on the 5x5 sized controller. One player moves with red, the other, with blue. The blue player begins the game.
