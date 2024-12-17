@@ -1,5 +1,5 @@
 
-import model.BoardModel;
+import state.GameState;
 import state.MyCircle;
 import org.junit.jupiter.api.Test;
 import service.GameService;
@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardModelTest2 {
 
-    BoardModel model = new BoardModel();
-    private final GameService gameService = new GameService(model);
+    GameState state = new GameState();
+    private final GameService gameService = new GameService(state);
 
     @Test
     void AreAllElementsTheSameTest(){
@@ -38,12 +38,12 @@ public class BoardModelTest2 {
     @Test
     void isCellEmptyTest(){
         assertTrue(gameService.isCellEmpty(-1, 0));
-        if(model.getBoard()[2][2] == null) assertTrue(gameService.isCellEmpty(2, 2));
+        if(state.getBoard()[2][2] == null) assertTrue(gameService.isCellEmpty(2, 2));
     }
 
     @Test
     void canBlueMoveToTest(){
-        var c = model.getBoard()[2][3];
+        var c = state.getBoard()[2][3];
         if(c == MyCircle.RED) assertTrue(gameService.canBlueMoveTo(2, 3));
         else assertFalse(gameService.canBlueMoveTo(2, 3));
     }

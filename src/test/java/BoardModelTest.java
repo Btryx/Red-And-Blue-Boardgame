@@ -1,4 +1,4 @@
-import model.BoardModel;
+import state.GameState;
 import state.MyCircle;
 import org.junit.jupiter.api.Test;
 import state.Direction;
@@ -8,20 +8,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardModelTest {
 
-    BoardModel model = new BoardModel();
-    private final GameService gameService = new GameService(model);
+    GameState gameState = new GameState();
+    private final GameService gameService = new GameService(gameState);
 
     @Test
     void moveTest(){
-        model.move(2, 2, Direction.UP);
+        gameState.move(2, 2, Direction.UP);
         if(!gameService.isGameOver()) {
-            assertEquals(model.getBoard()[2][2], MyCircle.NONE);
-            assertEquals(model.getBoard()[1][2], MyCircle.BLUE);
-            model.move(3, 2, Direction.UP);
-            assertEquals(model.getBoard()[3][2], MyCircle.NONE);
-            assertEquals(model.getBoard()[2][2], MyCircle.RED);
+            assertEquals(gameState.getBoard()[2][2], MyCircle.NONE);
+            assertEquals(gameState.getBoard()[1][2], MyCircle.BLUE);
+            gameState.move(3, 2, Direction.UP);
+            assertEquals(gameState.getBoard()[3][2], MyCircle.NONE);
+            assertEquals(gameState.getBoard()[2][2], MyCircle.RED);
         }else{
-            assertEquals(model.getBoard()[2][2], MyCircle.BLUE);
+            assertEquals(gameState.getBoard()[2][2], MyCircle.BLUE);
         }
     }
 
@@ -32,7 +32,7 @@ public class BoardModelTest {
                 "RED RED BLUE RED RED \n" +
                 "RED RED RED RED RED \n" +
                 "BLUE RED RED RED RED \n";
-        String toStr = model.toString();
+        String toStr = gameState.toString();
         assertEquals(expected, toStr);
     }
 }

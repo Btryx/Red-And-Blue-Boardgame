@@ -18,8 +18,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import model.BoardModel;
 import org.tinylog.Logger;
 import service.GameService;
 import state.Direction;
@@ -28,21 +28,16 @@ import state.MyCircle;
 
 import java.io.File;
 import java.io.IOException;
-import static model.BoardModel.BOARD_SIZE;
+import static state.GameState.BOARD_SIZE;
 
 public class GameController {
     // UI Components
     @FXML private GridPane grid;
-    @FXML private Button upButton;
-    @FXML private Button downButton;
-    @FXML private Button leftButton;
-    @FXML private Button rightButton;
     @FXML private Button leaderboard;
-    @FXML private TextField text;
+    @FXML private TextField turnText;
 
     // Game State Management
-    private GameState gameState;
-    private final BoardModel model;
+    private final GameState gameState;
     private final GameService gameService;
     private final WinnerRepository winnerRepo;
 
@@ -50,10 +45,18 @@ public class GameController {
     private final StringProperty blueName = new SimpleStringProperty();
     private final StringProperty redName = new SimpleStringProperty();
 
+
+    public void setBlueName(String blueName) {
+        this.blueName.set(blueName);
+    }
+
+    public void setRedName(String redName) {
+        this.redName.set(redName);
+    }
+
     public GameController() {
-        this.model = new BoardModel();
-        this.gameService = new GameService(model);
         this.gameState = new GameState();
+        this.gameService = new GameService(gameState);
         this.winnerRepo = new WinnerRepository();
     }
 
@@ -66,33 +69,23 @@ public class GameController {
     private void populateBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                Color color = model.getBoard()[i][j] == MyCircle.BLUE ? Color.BLUE : Color.RED;
-                Circle circle = createCircle(color, i, j);
+                Color color = gameState.getPieceAt(i,j) == MyCircle.BLUE ? Color.BLUE : Color.RED;
+                Circle circle = createCircle(color);
                 grid.add(circle, j, i);
             }
         }
     }
 
-    private Circle createCircle(Color color, int row, int col) {
+    private Circle createCircle(Color color) {
         Circle circle = new Circle(30);
         circle.setFill(color);
-
-        circle.setOnMouseClicked(event -> {
-            if (color == Color.RED) {
-                handleCircleSelection(event, Color.PINK, Color.RED, !gameState.isBlueTurn());
-            } else {
-                handleCircleSelection(event, Color.LIGHTBLUE, Color.BLUE, gameState.isBlueTurn());
-            }
-        });
-
         return circle;
     }
 
-    private void handleCircleSelection(MouseEvent event, Color highlightColor, Color originalColor, boolean isPlayerTurn) {
-        if (!gameService.isGameOver() && isPlayerTurn) {
-            deselectPreviousCircle();
-            selectCircle(event, highlightColor);
-        }
+    private void handleNewSelection(Circle clickedCircle, int clickedRow, int clickedCol) {
+        deselectPreviousCircle();
+        gameState.setSelectedCircle(clickedCircle, clickedRow, clickedCol, gameState.isBlueTurn() ? Color.LIGHTBLUE : Color.PINK);
+        Logger.debug("Selected piece at (" + clickedRow + ", " + clickedCol + ")");
     }
 
     private void deselectPreviousCircle() {
@@ -101,35 +94,94 @@ public class GameController {
         }
     }
 
-    private void selectCircle(MouseEvent event, Color highlightColor) {
-        Circle selectedCircle = (Circle) event.getSource();
-        int row = GridPane.getRowIndex(selectedCircle);
-        int col = GridPane.getColumnIndex(selectedCircle);
+    private boolean isValidNeighbor(int clickedRow, int clickedCol) {
+        int currentRow = gameState.getRow();
+        int currentCol = gameState.getCol();
 
-        gameState.setSelectedCircle(selectedCircle, row, col, highlightColor);
-        Logger.debug("Click on square (" + row + ", " + col + ")");
+        return (Math.abs(currentRow - clickedRow) == 1 && currentCol == clickedCol) ||
+                (Math.abs(currentCol - clickedCol) == 1 && currentRow == clickedRow);
     }
 
-    private void updateBoardStateAfterMove(Direction direction) throws IOException {
-        MyCircle[][] board = model.getBoard();
-        int row = gameState.getRow();
-        int col = gameState.getCol();
+    @FXML
+    private void handleCellClick(MouseEvent event) {
+        double gridWidth = grid.getWidth();
+        double gridHeight = grid.getHeight();
+        double cellWidth = gridWidth / BOARD_SIZE;
+        double cellHeight = gridHeight / BOARD_SIZE;
+
+        // Determine clicked row and column based on mouse position
+        double mouseX = event.getX();
+        double mouseY = event.getY();
+        int newRow = (int) (mouseY / cellHeight);
+        int newCol = (int) (mouseX / cellWidth);
+
         Circle selectedCircle = gameState.getSelectedCircle();
 
-        int newRow = row + direction.getRowChange();
-        int newCol = col + direction.getColChange();
-
-        if (gameState.isBlueTurn() && board[newRow][newCol] == MyCircle.RED) {
-            performBlueMove(selectedCircle, newRow, newCol);
-        } else if (!gameState.isBlueTurn() && board[newRow][newCol] == MyCircle.NONE) {
-            performRedMove(selectedCircle, newRow, newCol);
-        } else {
-            Logger.warn("Invalid move!");
+        if (newRow < 0 || newRow >= BOARD_SIZE || newCol < 0 || newCol >= BOARD_SIZE) {
+            Logger.warn("Click out of bounds!");
             return;
         }
 
-        gameService.makeMove(row, col, direction);
-        updateGameStatus();
+        Logger.debug("Mouse clicked at (" + mouseX + ", " + mouseY + ")");
+        Logger.debug("Calculated cell: (" + newRow + ", " + newCol + ")");
+
+        // Case 1: Attempting to select a piece
+        if (gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.BLUE) {
+            Circle clickedCircle = findCircleAt(newRow, newCol);
+            if (clickedCircle != null) {
+                handleNewSelection(clickedCircle, newRow, newCol);
+            }
+            return;
+        } else if (!gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.RED) {
+            Circle clickedCircle = findCircleAt(newRow, newCol);
+            if (clickedCircle != null) {
+                handleNewSelection(clickedCircle, newRow, newCol);
+            }
+            return;
+        }
+
+        // Case 2: Attempting to move the selected piece
+        if (gameState.isAnythingSelected()) {
+            if (gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.RED && isValidNeighbor(newRow, newCol)) {
+                performBlueMove(selectedCircle, newRow, newCol);
+                gameService.makeMove(gameState.getRow(), gameState.getCol(), getDirection(gameState.getRow(), gameState.getCol(), newRow, newCol));
+                deselectPreviousCircle();
+                updateGameStatus();
+            } else if (!gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.NONE && isValidNeighbor(newRow, newCol)) {
+                performRedMove(selectedCircle, newRow, newCol);
+                gameService.makeMove(gameState.getRow(), gameState.getCol(), getDirection(gameState.getRow(), gameState.getCol(), newRow, newCol));
+                deselectPreviousCircle();
+                updateGameStatus();
+            } else {
+                Logger.warn("Invalid move!");
+            }
+        }
+    }
+
+    private Circle findCircleAt(int row, int col) {
+        for (Node node : grid.getChildren()) {
+            Integer nodeRow = GridPane.getRowIndex(node);
+            Integer nodeCol = GridPane.getColumnIndex(node);
+
+            if (nodeRow == null) nodeRow = -1;
+            if (nodeCol == null) nodeCol = -1;
+
+            if (nodeRow == row && nodeCol == col && node instanceof Circle) {
+                return (Circle) node;
+            }
+        }
+        return null; // Return null if no circle is found at the specified position
+    }
+
+    private Direction getDirection(int row, int col, int newRow, int newCol) {
+        if (row == newRow) {
+            if (col < newCol) return Direction.RIGHT;
+            else return Direction.LEFT;
+        }
+        if (col == newCol && row < newRow) {
+            return Direction.DOWN;
+        }
+        return Direction.UP;
     }
 
     private void performBlueMove(Circle selectedCircle, int newRow, int newCol) {
@@ -164,9 +216,8 @@ public class GameController {
         }
     }
 
-    private void updateGameStatus() throws IOException {
-        text.setText(getCurrentPlayerTurnText());
-        Logger.debug("\n" + model);
+    private void updateGameStatus() {
+        turnText.setText(getCurrentPlayerTurnText());
         handleGameOver();
     }
 
@@ -174,19 +225,23 @@ public class GameController {
         return gameState.isBlueTurn() ? blueName.get() + "'s turn!" : redName.get() + "'s turn!";
     }
 
-    private void handleGameOver() throws IOException {
+    private void handleGameOver() {
         if (!gameService.isGameOver()) return;
 
-        Logger.debug("Game Over!");
-        boolean redWon = gameService.redWon();
-        String winnerName = redWon ? redName.get() : blueName.get();
-        String winnerColor = redWon ? "Red" : "Blue";
-        int winnerMoves = redWon ? gameState.getRedMoves() : gameState.getBlueMoves();
+        try {
+            Logger.debug("Game Over!");
+            boolean redWon = gameService.redWon();
+            String winnerName = redWon ? redName.get() : blueName.get();
+            String winnerColor = redWon ? "Red" : "Blue";
+            int winnerMoves = redWon ? gameState.getCountRedMoves() : gameState.getCountBlueMoves();
 
-        text.setText(winnerName + " won!");
-        saveWinner(winnerName, winnerColor, winnerMoves);
-        disableGameControls();
-        leaderboard.setVisible(true);
+            turnText.setText(winnerName + " won!");
+            saveWinner(winnerName, winnerColor, winnerMoves);
+            leaderboard.setVisible(true);
+        } catch (IOException e) {
+            Logger.error("File not found");
+        }
+
     }
 
     private void saveWinner(String winnerName, String winnerColor, int winnerMoves) throws IOException {
@@ -209,37 +264,6 @@ public class GameController {
         return file.length() == 0;
     }
 
-    private void disableGameControls() {
-        upButton.setDisable(true);
-        downButton.setDisable(true);
-        rightButton.setDisable(true);
-        leftButton.setDisable(true);
-    }
-
-    @FXML
-    private void up() throws IOException{
-        Logger.debug("Up button pressed");
-        updateBoardStateAfterMove(Direction.UP);
-    }
-
-    @FXML
-    private void down() throws IOException{
-        Logger.debug("Down button pressed");
-        updateBoardStateAfterMove(Direction.DOWN);
-    }
-
-    @FXML
-    private void left() throws IOException{
-        Logger.debug("Left button pressed");
-        updateBoardStateAfterMove(Direction.LEFT);
-    }
-
-    @FXML
-    private void right() throws IOException {
-        Logger.debug("Right button pressed");
-        updateBoardStateAfterMove(Direction.RIGHT);
-    }
-
     @FXML
     private void exit() {
         Logger.debug("Exiting...");
@@ -255,14 +279,5 @@ public class GameController {
         stage.centerOnScreen();
         stage.show();
         Logger.debug("Switching to leaderboard...");
-    }
-
-    // Setter methods for player names
-    public void setBlueName(String blueName) {
-        this.blueName.set(blueName);
-    }
-
-    public void setRedName(String redName) {
-        this.redName.set(redName);
     }
 }

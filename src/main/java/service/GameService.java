@@ -1,8 +1,8 @@
 package service;
 
 import state.Direction;
+import state.GameState;
 import state.MyCircle;
-import model.BoardModel;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
@@ -11,15 +11,15 @@ import java.util.stream.IntStream;
  * Service class responsible for game logic and state validation.
  */
 public class GameService {
-    private final BoardModel model;
+    private final GameState gameState;
 
     /**
      * Constructs a GameService with the given board model.
      *
-     * @param model the board model to be used for game logic
+     * @param gameState the board model to be used for game logic
      */
-    public GameService(BoardModel model) {
-        this.model = model;
+    public GameService(GameState gameState) {
+        this.gameState = gameState;
     }
 
     /**
@@ -60,9 +60,9 @@ public class GameService {
         ArrayList<Integer> rows = new ArrayList<>();
         ArrayList<Integer> cols = new ArrayList<>();
 
-        for (int i = 0; i < BoardModel.BOARD_SIZE; i++) {
-            for (int j = 0; j < BoardModel.BOARD_SIZE; j++) {
-                if (model.getBoard()[i][j] == MyCircle.BLUE) {
+        for (int i = 0; i < GameState.BOARD_SIZE; i++) {
+            for (int j = 0; j < GameState.BOARD_SIZE; j++) {
+                if (gameState.getBoard()[i][j] == MyCircle.BLUE) {
                     rows.add(i);
                     cols.add(j);
                 }
@@ -120,7 +120,7 @@ public class GameService {
      * @return true if cell is empty or out of bounds
      */
     public boolean isCellEmpty(final int row, final int col) {
-        return !isWithinBounds(row, col) || model.getBoard()[row][col] == MyCircle.NONE;
+        return !isWithinBounds(row, col) || gameState.getBoard()[row][col] == MyCircle.NONE;
     }
 
     /**
@@ -131,8 +131,8 @@ public class GameService {
      * @return true if cell is within bounds
      */
     private boolean isWithinBounds(int row, int col) {
-        return row >= 0 && row < BoardModel.BOARD_SIZE
-                && col >= 0 && col < BoardModel.BOARD_SIZE;
+        return row >= 0 && row < GameState.BOARD_SIZE
+                && col >= 0 && col < GameState.BOARD_SIZE;
     }
 
     /**
@@ -144,7 +144,7 @@ public class GameService {
      */
     public boolean canBlueMoveTo(int row, int col) {
         return isWithinBounds(row, col)
-                && model.getBoard()[row][col] != MyCircle.BLUE
+                && gameState.getBoard()[row][col] != MyCircle.BLUE
                 && !isCellEmpty(row, col);
     }
 
@@ -166,7 +166,7 @@ public class GameService {
      */
     public void makeMove(int row, int col, Direction direction) {
         if (!isGameOver()) {
-            model.move(row, col, direction);
+            gameState.move(row, col, direction);
         }
     }
 

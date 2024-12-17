@@ -9,17 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="962.0" prefWidth="964.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
-    <Button fx:id="upButton" layoutX="466.0" layoutY="220.0" mnemonicParsing="false" onAction="#up" prefHeight="25.0" prefWidth="54.0" text="UP">
-        <font>
-            <Font name="System Bold" size="10.0" />
-        </font>
-    </Button>
-    <Button fx:id="downButton" layoutX="465.0" layoutY="771.0" mnemonicParsing="false" onAction="#down" text="DOWN">
-        <font>
-            <Font name="System Bold" size="10.0" />
-        </font>
-    </Button>
-    <GridPane id="grid" fx:id="grid" alignment="CENTER" gridLinesVisible="true" layoutX="278.0" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="10.0" minWidth="10.0" prefHeight="430.0" prefWidth="430.0">
+    <GridPane id="grid" fx:id="grid" onMouseClicked="#handleCellClick" alignment="CENTER" gridLinesVisible="true" layoutX="278.0" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="10.0" minWidth="10.0" prefHeight="430.0" prefWidth="430.0">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -35,17 +25,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
     </GridPane>
-    <Button fx:id="leftButton" layoutX="155.0" layoutY="490.0" mnemonicParsing="false" onAction="#left" prefHeight="25.0" prefWidth="54.0" text="LEFT">
-        <font>
-            <Font name="System Bold" size="10.0" />
-        </font>
-    </Button>
-    <Button fx:id="rightButton" layoutX="775.0" layoutY="490.0" mnemonicParsing="false" onAction="#right" prefHeight="25.0" prefWidth="54.0" text="RIGHT">
-        <font>
-            <Font name="System Bold" size="10.0" />
-        </font>
-    </Button>
-    <TextField fx:id="text" editable="false" alignment="CENTER" layoutX="250.0" layoutY="30.0" prefHeight="82.0" prefWidth="465.0" text="WELCOME">
+    <TextField fx:id="turnText" editable="false" alignment="CENTER" layoutX="250.0" layoutY="30.0" prefHeight="82.0" prefWidth="465.0" text="WELCOME">
         <font>
             <Font name="System Bold" size="36.0" />
         </font>
