@@ -1,6 +1,5 @@
 package state;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 import lombok.Setter;
@@ -100,32 +99,12 @@ public class GameState {
     /**
      * Moves a piece on the board in the specified direction.
      *
-     * @param row       Row of the piece to move
-     * @param col       Column of the piece to move
-     * @param direction Direction of movement
-     * @throws IllegalArgumentException if move is invalid
+     * @param row     Row where the piece is
+     * @param col     Column where the piece is
+     * @param newRow  Row where the node will move to
+     * @param newCol  Column where the node will move to
      */
-    public void move(int row, int col, Direction direction, boolean blueMove) {
-        // Validate input
-        if (!isWithinBounds(row, col)) {
-            throw new IllegalArgumentException("Invalid starting position");
-        }
-
-        MyCircle currentPiece = board[row][col];
-        if (currentPiece == MyCircle.NONE) {
-            throw new IllegalArgumentException("No piece at the specified position");
-        }
-
-        int newRow = row + direction.getRowChange();
-        int newCol = col + direction.getColChange();
-
-        // Validate new position
-        if (!isWithinBounds(newRow, newCol)) {
-            Logger.warn("Move out of board bounds");
-            return;
-        }
-
-        // Perform move based on piece type
+    public void move(int row, int col, int newRow, int newCol, boolean blueMove) {
         if (blueMove) {
             performBlueMove(row, col, newRow, newCol);
         } else {

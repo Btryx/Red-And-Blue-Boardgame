@@ -6,38 +6,42 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="962.0" prefWidth="964.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
-    <GridPane id="grid" fx:id="grid" onMouseClicked="#handleCellClick" alignment="CENTER" gridLinesVisible="true" layoutX="278.0" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="10.0" minWidth="10.0" prefHeight="430.0" prefWidth="430.0">
-        <columnConstraints>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-        </rowConstraints>
-    </GridPane>
-    <TextField fx:id="turnText" editable="false" alignment="CENTER" layoutX="250.0" layoutY="30.0" prefHeight="82.0" prefWidth="465.0" text="WELCOME">
-        <font>
-            <Font name="System Bold" size="36.0" />
-        </font>
-    </TextField>
-    <Button fx:id="exitButton" layoutX="28.0" layoutY="857.0" mnemonicParsing="false" onAction="#exit" prefHeight="73.0" prefWidth="164.0" text="EXIT">
-        <font>
-          <Font name="System Bold" size="29.0" />
-        </font>
-    </Button>
-   <Button fx:id="leaderboard" layoutX="763.0" layoutY="857.0" mnemonicParsing="false" onAction="#switchToLeaderBoard" prefHeight="73.0" prefWidth="170.0" text="LEADERBOARD">
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font>
-   </Button>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="962.0" prefWidth="964.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController" stylesheets="@styles.css">
+    <VBox alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="962.0" prefWidth="964.0" spacing="20">
+        <VBox spacing="10.0" alignment="CENTER_LEFT" styleClass="header-box">
+            <Button text="Restart" onAction="#restartGame" styleClass="restart-button" />
+        </VBox>
+        <TextField fx:id="turnText" editable="false" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" text="WELCOME" styleClass="turn-text">
+            <font>
+                <Font name="Roboto" size="24.0" />
+            </font>
+        </TextField>
+
+        <!-- Game Board -->
+        <GridPane id="grid" fx:id="grid" onMouseClicked="#handleCellClick" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="10.0" minWidth="10.0" prefHeight="600.0" prefWidth="600.0" styleClass="grid-pane">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="120.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="120.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="120.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="120.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="120.0" valignment="CENTER" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+
+        <!-- Buttons -->
+        <VBox alignment="CENTER" spacing="20">
+            <Button fx:id="leaderboard" mnemonicParsing="false" onAction="#switchToLeaderBoard" prefHeight="60.0" prefWidth="160.0" text="LEADERBOARD" styleClass="action-button" />
+            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exit" prefHeight="60.0" prefWidth="160.0" text="EXIT" styleClass="action-button" />
+        </VBox>
+    </VBox>
 </AnchorPane>

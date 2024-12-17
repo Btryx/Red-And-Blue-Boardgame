@@ -4,10 +4,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OpeningSceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OpeningSceneController" style="-fx-background-color: lightgray;">
    <children>
-      <Button layoutX="229.0" layoutY="279.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="34.0" prefWidth="142.0" text="START GAME" />
-      <TextField fx:id="firstPlayer" layoutX="52.0" layoutY="175.0" prefHeight="25.0" prefWidth="214.0" />
-      <TextField fx:id="secondPlayer" layoutX="330.0" layoutY="175.0" prefHeight="25.0" prefWidth="214.0" />
+      <!-- Start Game Button -->
+      <Button layoutX="229.0" layoutY="279.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="40.0" prefWidth="160.0" text="START GAME" style="-fx-background-color: #0078D7; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" />
+
+      <!-- First Player TextField -->
+      <TextField fx:id="firstPlayer" layoutX="52.0" layoutY="175.0" prefHeight="40.0" prefWidth="214.0" promptText="First Player Name" style="-fx-font-size: 14px; -fx-border-radius: 10; -fx-background-radius: 10;" />
+
+      <!-- Second Player TextField -->
+      <TextField fx:id="secondPlayer" layoutX="330.0" layoutY="175.0" prefHeight="40.0" prefWidth="214.0" promptText="Second Player Name" style="-fx-font-size: 14px; -fx-border-radius: 10; -fx-background-radius: 10;" />
    </children>
 </AnchorPane>

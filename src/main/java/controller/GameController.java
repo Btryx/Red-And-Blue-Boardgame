@@ -18,12 +18,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.tinylog.Logger;
 import service.GameService;
 import service.WinnerService;
 import state.GameState;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static state.GameState.BOARD_SIZE;
 
@@ -81,6 +83,29 @@ public class GameController {
 
     @FXML
     private void handleCellClick(MouseEvent event) {
+        Pair<Integer, Integer> indexes = calculateClickedNode(event);
+        int newRow = indexes.getKey();
+        int newCol = indexes.getValue();
+
+        if (newRow < 0 || newRow >= BOARD_SIZE || newCol < 0 || newCol >= BOARD_SIZE) {
+            Logger.warn("Click out of bounds!");
+            return;
+        }
+
+        // Case 1: Attempting to select a piece
+        if (gameService.isPieceSelectable(newRow, newCol)) {
+            select(newRow, newCol);
+            return;
+        }
+
+        // Case 2: Attempting to move the selected piece
+        if (gameService.isAnythingSelected()) {
+            Circle selectedCircle = gameService.getSelectedCircle();
+            move(selectedCircle, newRow, newCol);
+        }
+    }
+
+    private Pair<Integer, Integer> calculateClickedNode(MouseEvent event) {
         double gridWidth = grid.getWidth();
         double gridHeight = grid.getHeight();
         double cellWidth = gridWidth / BOARD_SIZE;
@@ -91,41 +116,30 @@ public class GameController {
         double mouseY = event.getY();
         int newRow = (int) (mouseY / cellHeight);
         int newCol = (int) (mouseX / cellWidth);
-
-        Circle selectedCircle = gameService.getSelectedCircle();
-
-        if (newRow < 0 || newRow >= BOARD_SIZE || newCol < 0 || newCol >= BOARD_SIZE) {
-            Logger.warn("Click out of bounds!");
-            return;
-        }
-
         Logger.debug("Calculated cell: (" + newRow + ", " + newCol + ")");
+        return new Pair<>(newRow, newCol);
+    }
 
-        // Case 1: Attempting to select a piece
-        if (gameService.isBlueTurn() && gameService.isPieceBlue(newRow, newCol)) {
-            Circle clickedCircle = findCircleAt(newRow, newCol);
-            if (clickedCircle != null) {
-                gameService.handleNewSelection(clickedCircle, newRow, newCol);
-            }
-            return;
-        } else if (!gameService.isBlueTurn() && gameService.isPieceRed(newRow, newCol)) {
-            Circle clickedCircle = findCircleAt(newRow, newCol);
-            if (clickedCircle != null) {
-                gameService.handleNewSelection(clickedCircle, newRow, newCol);
-            }
+    private void select(int newRow, int newCol) {
+        Circle clickedCircle = findCircleAt(newRow, newCol);
+        if (clickedCircle != null) {
+            gameService.handleNewSelection(clickedCircle, newRow, newCol);
+        }
+    }
+
+    private void move(Circle selectedCircle, int newRow, int newCol) {
+        if (!gameService.isWithinBounds(newRow, newCol)) {
+            Logger.warn("Ending position is out of bounds");
             return;
         }
 
-        // Case 2: Attempting to move the selected piece
-        if (gameService.isAnythingSelected()) {
-            if (blueMoveIsValid(newRow, newCol)) {
-                moveBlue(selectedCircle, newRow, newCol);
+        if (blueMoveIsValid(newRow, newCol)) {
+            moveBlue(selectedCircle, newRow, newCol);
 
-            } else if (redMoveIsValid(newRow, newCol)) {
-                moveRed(selectedCircle, newRow, newCol);
-            } else {
-                Logger.warn("Invalid move!");
-            }
+        } else if (redMoveIsValid(newRow, newCol)) {
+            moveRed(selectedCircle, newRow, newCol);
+        } else {
+            Logger.warn("Invalid move!");
         }
     }
 
@@ -157,13 +171,13 @@ public class GameController {
     }
 
     private void moveBlue(Circle selectedCircle, int newRow, int newCol) {
-        gameService.makeMove(newRow, newCol, true);
+        gameService.movePiece(newRow, newCol, true);
         updateUI(selectedCircle, newRow, newCol, Color.BLUE);
         handleGameOver();
     }
 
     private void moveRed(Circle selectedCircle, int newRow, int newCol) {
-        gameService.makeMove(newRow, newCol, false);
+        gameService.movePiece(newRow, newCol, false);
         updateUI(selectedCircle, newRow, newCol, Color.RED);
         handleGameOver();
     }
@@ -196,23 +210,18 @@ public class GameController {
     private void handleGameOver() {
         if (!gameService.isGameOver()) return;
 
-        try {
-            Logger.debug("Game Over!");
-            boolean redWon = gameService.redWon();
-            String winnerName = redWon ? redName.get() : blueName.get();
-            String winnerColor = redWon ? "Red" : "Blue";
-            int winnerMoves = redWon ? gameService.getRedMoves() : gameService.getBlueMoves();
+        Logger.debug("Game Over!");
+        boolean redWon = gameService.redWon();
+        String winnerName = redWon ? redName.get() : blueName.get();
+        String winnerColor = redWon ? "Red" : "Blue";
+        int winnerMoves = redWon ? gameService.getRedMoves() : gameService.getBlueMoves();
 
-            turnText.setText(winnerName + " won!");
-            saveWinner(winnerName, winnerColor, winnerMoves);
-            leaderboard.setVisible(true);
-        } catch (IOException e) {
-            Logger.error("File not found");
-        }
-
+        turnText.setText(winnerName + " won!");
+        leaderboard.setVisible(true);
+        saveWinner(winnerName, winnerColor, winnerMoves);
     }
 
-    private void saveWinner(String winnerName, String winnerColor, int winnerMoves) throws IOException {
+    private void saveWinner(String winnerName, String winnerColor, int winnerMoves){
         try {
             winnerService.saveWinner(winnerName, winnerColor, winnerMoves);
         } catch (IOException e) {
@@ -230,6 +239,20 @@ public class GameController {
         stage.centerOnScreen();
         stage.show();
         Logger.debug("Switching to leaderboard...");
+    }
+
+    @FXML
+    public void restartGame(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(Objects.
+                    requireNonNull(getClass().getResource("/first.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+            Logger.debug("Restarting...");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

@@ -3,7 +3,6 @@ package service;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.tinylog.Logger;
-import state.Direction;
 import state.GameState;
 import state.MyCircle;
 
@@ -122,9 +121,8 @@ public class GameService {
      * @param col Column to check
      * @return true if cell is within bounds
      */
-    private boolean isWithinBounds(int row, int col) {
-        return row >= 0 && row < GameState.BOARD_SIZE
-                && col >= 0 && col < GameState.BOARD_SIZE;
+    public boolean isWithinBounds(int row, int col) {
+        return gameState.isWithinBounds(row, col);
     }
 
     /**
@@ -165,24 +163,12 @@ public class GameService {
      * @param newRow Ending row of the move
      * @param newCol Ending column of the move
      */
-    public void makeMove(int newRow, int newCol, boolean blueMove) {
+    public void movePiece(int newRow, int newCol, boolean blueMove) {
         if (!isGameOver()) {
-            Direction direction = getDirection(gameState.getRow(), gameState.getCol(), newRow, newCol);
-            gameState.move(gameState.getRow(), gameState.getCol(), direction, blueMove);
+            gameState.move(gameState.getRow(), gameState.getCol(), newRow, newCol, blueMove);
             deselectPreviousCircle();
             turnChange(!blueMove);
         }
-    }
-
-    private Direction getDirection(int row, int col, int newRow, int newCol) {
-        if (row == newRow) {
-            if (col < newCol) return Direction.RIGHT;
-            else return Direction.LEFT;
-        }
-        if (col == newCol && row < newRow) {
-            return Direction.DOWN;
-        }
-        return Direction.UP;
     }
 
     public void handleNewSelection(Circle clickedCircle, int clickedRow, int clickedCol) {
@@ -224,6 +210,11 @@ public class GameService {
 
     public Circle getSelectedCircle() {
         return gameState.getSelectedCircle();
+    }
+
+    public boolean isPieceSelectable(int newRow, int newCol) {
+        return isBlueTurn() && isPieceBlue(newRow, newCol)
+                || !isBlueTurn() && isPieceRed(newRow, newCol);
     }
 
     public int getRedMoves() {
