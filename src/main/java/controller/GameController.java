@@ -18,13 +18,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.tinylog.Logger;
 import service.GameService;
-import state.Direction;
+import service.WinnerService;
 import state.GameState;
-import state.MyCircle;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,14 +35,12 @@ public class GameController {
     @FXML private TextField turnText;
 
     // Game State Management
-    private final GameState gameState;
     private final GameService gameService;
-    private final WinnerRepository winnerRepo;
+    private final WinnerService winnerService;
 
     // Player Information
     private final StringProperty blueName = new SimpleStringProperty();
     private final StringProperty redName = new SimpleStringProperty();
-
 
     public void setBlueName(String blueName) {
         this.blueName.set(blueName);
@@ -55,9 +51,8 @@ public class GameController {
     }
 
     public GameController() {
-        this.gameState = new GameState();
-        this.gameService = new GameService(gameState);
-        this.winnerRepo = new WinnerRepository();
+        this.gameService = new GameService(new GameState());
+        this.winnerService = new WinnerService(new WinnerRepository());
     }
 
     @FXML
@@ -69,7 +64,7 @@ public class GameController {
     private void populateBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                Color color = gameState.getPieceAt(i,j) == MyCircle.BLUE ? Color.BLUE : Color.RED;
+                Color color = gameService.isPieceBlue(i,j) ? Color.BLUE : Color.RED;
                 Circle circle = createCircle(color);
                 grid.add(circle, j, i);
             }
@@ -80,26 +75,6 @@ public class GameController {
         Circle circle = new Circle(30);
         circle.setFill(color);
         return circle;
-    }
-
-    private void handleNewSelection(Circle clickedCircle, int clickedRow, int clickedCol) {
-        deselectPreviousCircle();
-        gameState.setSelectedCircle(clickedCircle, clickedRow, clickedCol, gameState.isBlueTurn() ? Color.LIGHTBLUE : Color.PINK);
-        Logger.debug("Selected piece at (" + clickedRow + ", " + clickedCol + ")");
-    }
-
-    private void deselectPreviousCircle() {
-        if (gameState.isAnythingSelected()) {
-            gameState.getSelectedCircle().setFill(gameState.isBlueTurn() ? Color.BLUE : Color.RED);
-        }
-    }
-
-    private boolean isValidNeighbor(int clickedRow, int clickedCol) {
-        int currentRow = gameState.getRow();
-        int currentCol = gameState.getCol();
-
-        return (Math.abs(currentRow - clickedRow) == 1 && currentCol == clickedCol) ||
-                (Math.abs(currentCol - clickedCol) == 1 && currentRow == clickedRow);
     }
 
     @FXML
@@ -115,7 +90,7 @@ public class GameController {
         int newRow = (int) (mouseY / cellHeight);
         int newCol = (int) (mouseX / cellWidth);
 
-        Circle selectedCircle = gameState.getSelectedCircle();
+        Circle selectedCircle = gameService.getSelectedCircle();
 
         if (newRow < 0 || newRow >= BOARD_SIZE || newCol < 0 || newCol >= BOARD_SIZE) {
             Logger.warn("Click out of bounds!");
@@ -126,36 +101,43 @@ public class GameController {
         Logger.debug("Calculated cell: (" + newRow + ", " + newCol + ")");
 
         // Case 1: Attempting to select a piece
-        if (gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.BLUE) {
+        if (gameService.isBlueTurn() && gameService.isPieceBlue(newRow, newCol)) {
             Circle clickedCircle = findCircleAt(newRow, newCol);
             if (clickedCircle != null) {
-                handleNewSelection(clickedCircle, newRow, newCol);
+                gameService.handleNewSelection(clickedCircle, newRow, newCol);
             }
             return;
-        } else if (!gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.RED) {
+        } else if (!gameService.isBlueTurn() && gameService.isPieceRed(newRow, newCol)) {
             Circle clickedCircle = findCircleAt(newRow, newCol);
             if (clickedCircle != null) {
-                handleNewSelection(clickedCircle, newRow, newCol);
+                gameService.handleNewSelection(clickedCircle, newRow, newCol);
             }
             return;
         }
 
         // Case 2: Attempting to move the selected piece
-        if (gameState.isAnythingSelected()) {
-            if (gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.RED && isValidNeighbor(newRow, newCol)) {
-                performBlueMove(selectedCircle, newRow, newCol);
-                gameService.makeMove(gameState.getRow(), gameState.getCol(), getDirection(gameState.getRow(), gameState.getCol(), newRow, newCol));
-                deselectPreviousCircle();
-                updateGameStatus();
-            } else if (!gameState.isBlueTurn() && gameState.getPieceAt(newRow, newCol) == MyCircle.NONE && isValidNeighbor(newRow, newCol)) {
-                performRedMove(selectedCircle, newRow, newCol);
-                gameService.makeMove(gameState.getRow(), gameState.getCol(), getDirection(gameState.getRow(), gameState.getCol(), newRow, newCol));
-                deselectPreviousCircle();
-                updateGameStatus();
+        if (gameService.isAnythingSelected()) {
+            if (blueMoveIsValid(newRow, newCol)) {
+                moveBlue(selectedCircle, newRow, newCol);
+
+            } else if (redMoveIsValid(newRow, newCol)) {
+                moveRed(selectedCircle, newRow, newCol);
             } else {
                 Logger.warn("Invalid move!");
             }
         }
+    }
+
+    private boolean redMoveIsValid(int newRow, int newCol) {
+        return !gameService.isBlueTurn()
+                && gameService.isPieceEmpty(newRow, newCol)
+                && gameService.isValidNeighbor(newRow, newCol);
+    }
+
+    private boolean blueMoveIsValid(int newRow, int newCol) {
+        return gameService.isBlueTurn()
+                && gameService.isPieceRed(newRow, newCol)
+                && gameService.isValidNeighbor(newRow, newCol);
     }
 
     private Circle findCircleAt(int row, int col) {
@@ -170,38 +152,31 @@ public class GameController {
                 return (Circle) node;
             }
         }
-        return null; // Return null if no circle is found at the specified position
+        return null;
     }
 
-    private Direction getDirection(int row, int col, int newRow, int newCol) {
-        if (row == newRow) {
-            if (col < newCol) return Direction.RIGHT;
-            else return Direction.LEFT;
-        }
-        if (col == newCol && row < newRow) {
-            return Direction.DOWN;
-        }
-        return Direction.UP;
+    private void moveBlue(Circle selectedCircle, int newRow, int newCol) {
+        updateGrid(selectedCircle, newRow, newCol, Color.BLUE);
+        gameService.turnChange(false);
+        gameService.makeMove(newRow, newCol);
+        turnText.setText(getCurrentPlayerTurnText());
+        handleGameOver();
     }
 
-    private void performBlueMove(Circle selectedCircle, int newRow, int newCol) {
-        updateGridForMove(selectedCircle, newRow, newCol, Color.BLUE);
-        gameState.switchTurn(false);
-        gameState.incrementBlueMoves();
+    private void moveRed(Circle selectedCircle, int newRow, int newCol) {
+        updateGrid(selectedCircle, newRow, newCol, Color.RED);
+        gameService.turnChange(true);
+        gameService.makeMove(newRow, newCol);
+        turnText.setText(getCurrentPlayerTurnText());
+        handleGameOver();
     }
 
-    private void performRedMove(Circle selectedCircle, int newRow, int newCol) {
-        updateGridForMove(selectedCircle, newRow, newCol, Color.RED);
-        gameState.switchTurn(true);
-        gameState.incrementRedMoves();
-    }
-
-    private void updateGridForMove(Circle selectedCircle, int newRow, int newCol, Color color) {
+    private void updateGrid(Circle selectedCircle, int newRow, int newCol, Color color) {
         grid.getChildren().remove(selectedCircle);
         removeNodeByRowColumnIndex(newRow, newCol);
         grid.add(selectedCircle, newCol, newRow);
         selectedCircle.setFill(color);
-        gameState.resetSelection();
+        gameService.resetSelection();
     }
 
     public void removeNodeByRowColumnIndex(final int row,final int column) {
@@ -216,13 +191,8 @@ public class GameController {
         }
     }
 
-    private void updateGameStatus() {
-        turnText.setText(getCurrentPlayerTurnText());
-        handleGameOver();
-    }
-
     private String getCurrentPlayerTurnText() {
-        return gameState.isBlueTurn() ? blueName.get() + "'s turn!" : redName.get() + "'s turn!";
+        return gameService.isBlueTurn() ? blueName.get() + "'s turn!" : redName.get() + "'s turn!";
     }
 
     private void handleGameOver() {
@@ -233,7 +203,7 @@ public class GameController {
             boolean redWon = gameService.redWon();
             String winnerName = redWon ? redName.get() : blueName.get();
             String winnerColor = redWon ? "Red" : "Blue";
-            int winnerMoves = redWon ? gameState.getCountRedMoves() : gameState.getCountBlueMoves();
+            int winnerMoves = redWon ? gameService.getRedMoves() : gameService.getBlueMoves();
 
             turnText.setText(winnerName + " won!");
             saveWinner(winnerName, winnerColor, winnerMoves);
@@ -247,7 +217,7 @@ public class GameController {
     private void saveWinner(String winnerName, String winnerColor, int winnerMoves) throws IOException {
         File winnerFile = new File("winners.json");
         if (!isFileEmpty(winnerFile)) {
-            winnerRepo.loadFromFile(winnerFile);
+            winnerService.loadWinnersFromFile(winnerFile);
         }
 
         Winner winner = Winner.builder()
@@ -256,8 +226,8 @@ public class GameController {
                 .winnerMoves(winnerMoves)
                 .build();
 
-        winnerRepo.add(winner);
-        winnerRepo.saveToFile(winnerFile);
+        winnerService.addWinner(winner);
+        winnerService.saveWinnersToFile(winnerFile);
     }
 
     private boolean isFileEmpty(File file) {

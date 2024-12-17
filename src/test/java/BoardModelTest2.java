@@ -36,12 +36,6 @@ public class BoardModelTest2 {
     }
 
     @Test
-    void isCellEmptyTest(){
-        assertTrue(gameService.isCellEmpty(-1, 0));
-        if(state.getBoard()[2][2] == null) assertTrue(gameService.isCellEmpty(2, 2));
-    }
-
-    @Test
     void canBlueMoveToTest(){
         var c = state.getBoard()[2][3];
         if(c == MyCircle.RED) assertTrue(gameService.canBlueMoveTo(2, 3));

@@ -1,5 +1,8 @@
 package service;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import org.tinylog.Logger;
 import state.Direction;
 import state.GameState;
 import state.MyCircle;
@@ -113,17 +116,6 @@ public class GameService {
     }
 
     /**
-     * Checks if a cell is empty or out of bounds.
-     *
-     * @param row Row to check
-     * @param col Column to check
-     * @return true if cell is empty or out of bounds
-     */
-    public boolean isCellEmpty(final int row, final int col) {
-        return !isWithinBounds(row, col) || gameState.getBoard()[row][col] == MyCircle.NONE;
-    }
-
-    /**
      * Checks if a cell is within board bounds.
      *
      * @param row Row to check
@@ -143,9 +135,19 @@ public class GameService {
      * @return true if blue can move to the position
      */
     public boolean canBlueMoveTo(int row, int col) {
-        return isWithinBounds(row, col)
-                && gameState.getBoard()[row][col] != MyCircle.BLUE
-                && !isCellEmpty(row, col);
+        return isWithinBounds(row, col) && gameState.getPieceAt(row, col) == MyCircle.RED;
+    }
+
+    public boolean isPieceBlue(int row, int col) {
+        return gameState.getPieceAt(row, col) == MyCircle.BLUE;
+    }
+
+    public boolean isPieceRed(int row, int col) {
+        return gameState.getPieceAt(row, col) == MyCircle.RED;
+    }
+
+    public boolean isPieceEmpty(int row, int col) {
+        return gameState.getPieceAt(row, col) == MyCircle.NONE;
     }
 
     /**
@@ -159,15 +161,87 @@ public class GameService {
 
     /**
      * Makes a move on the board if the game is not over.
-     *
-     * @param row Starting row of the move
-     * @param col Starting column of the move
-     * @param direction Direction of the move
+     * @param newRow Ending row of the move
+     * @param newCol Ending column of the move
      */
-    public void makeMove(int row, int col, Direction direction) {
+    public void makeMove(int newRow, int newCol) {
         if (!isGameOver()) {
-            gameState.move(row, col, direction);
+            Direction direction = getDirection(gameState.getRow(), gameState.getCol(), newRow, newCol);
+            gameState.move(gameState.getRow(), gameState.getCol(), direction);
+            deselectPreviousCircle();
         }
+    }
+
+    private Direction getDirection(int row, int col, int newRow, int newCol) {
+        if (row == newRow) {
+            if (col < newCol) return Direction.RIGHT;
+            else return Direction.LEFT;
+        }
+        if (col == newCol && row < newRow) {
+            return Direction.DOWN;
+        }
+        return Direction.UP;
+    }
+
+    public void handleNewSelection(Circle clickedCircle, int clickedRow, int clickedCol) {
+        deselectPreviousCircle();
+        setSelectedCircle(clickedCircle, clickedRow, clickedCol, isBlueTurn() ? Color.DARKBLUE : Color.DARKRED);
+        Logger.debug("Selected piece at (" + clickedRow + ", " + clickedCol + ")");
+    }
+
+    private void deselectPreviousCircle() {
+        if (isAnythingSelected()) {
+            gameState.getSelectedCircle().setFill(isBlueTurn() ? Color.BLUE : Color.RED);
+        }
+    }
+
+    public boolean isValidNeighbor(int clickedRow, int clickedCol) {
+        int currentRow = gameState.getRow();
+        int currentCol = gameState.getCol();
+
+        return (Math.abs(currentRow - clickedRow) == 1 && currentCol == clickedCol) ||
+                (Math.abs(currentCol - clickedCol) == 1 && currentRow == clickedRow);
+    }
+
+    public void turnChange(boolean blueTurnNext) {
+        if (blueTurnNext) {
+            gameState.setBlueTurn(true);
+            gameState.incrementRedMoves();
+        } else {
+            gameState.setBlueTurn(false);
+            gameState.incrementBlueMoves();
+        }
+    }
+
+    public void setSelectedCircle(Circle circle, int row, int col, Color highlightColor) {
+        gameState.setSelectedCircle(circle);
+        gameState.setRow(row);
+        gameState.setCol(col);
+        circle.setFill(highlightColor);
+    }
+
+    public Circle getSelectedCircle() {
+        return gameState.getSelectedCircle();
+    }
+
+    public int getRedMoves() {
+        return gameState.getCountRedMoves();
+    }
+
+    public int getBlueMoves() {
+        return gameState.getCountBlueMoves();
+    }
+
+    public boolean isBlueTurn() {
+        return gameState.isBlueTurn();
+    }
+
+    public void resetSelection() {
+        gameState.setSelectedCircle(null);
+    }
+
+    public boolean isAnythingSelected() {
+        return gameState.getSelectedCircle() != null;
     }
 
     /**

@@ -3,12 +3,14 @@ package state;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
+import lombok.Setter;
 import org.tinylog.Logger;
 
 /**
  * Represents the current state of the game board
  */
 @Getter
+@Setter
 public class GameState {
 
     /**
@@ -151,30 +153,11 @@ public class GameState {
         Logger.info("Moving red circle from ({}, {}) to ({}, {})", oldRow, oldCol, newRow, newCol);
     }
 
-    public void setSelectedCircle(Circle circle, int row, int col, Color highlightColor) {
-        this.selectedCircle = circle;
-        this.row = row;
-        this.col = col;
-        circle.setFill(highlightColor);
-    }
-
-    public void resetSelection() {
-        this.selectedCircle = null;
-    }
-
-    public void switchTurn(boolean blueTurn) {
-        this.blueTurn = blueTurn;
-    }
-
     public void incrementBlueMoves() {
         countBlueMoves++;
     }
 
     public void incrementRedMoves() {
         countRedMoves++;
-    }
-
-    public boolean isAnythingSelected() {
-        return selectedCircle != null;
     }
 }
