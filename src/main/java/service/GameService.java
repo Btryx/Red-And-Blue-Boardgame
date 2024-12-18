@@ -163,11 +163,10 @@ public class GameService {
      * @param newRow Ending row of the move
      * @param newCol Ending column of the move
      */
-    public void movePiece(int newRow, int newCol, boolean blueMove) {
+    public void movePiece(int newRow, int newCol) {
         if (!isGameOver()) {
-            gameState.move(gameState.getRow(), gameState.getCol(), newRow, newCol, blueMove);
+            gameState.move(gameState.getRow(), gameState.getCol(), newRow, newCol);
             deselectPreviousCircle();
-            turnChange(!blueMove);
         }
     }
 
@@ -189,16 +188,6 @@ public class GameService {
 
         return (Math.abs(currentRow - clickedRow) == 1 && currentCol == clickedCol) ||
                 (Math.abs(currentCol - clickedCol) == 1 && currentRow == clickedRow);
-    }
-
-    public void turnChange(boolean blueTurnNext) {
-        if (blueTurnNext) {
-            gameState.setBlueTurn(true);
-            gameState.incrementRedMoves();
-        } else {
-            gameState.setBlueTurn(false);
-            gameState.incrementBlueMoves();
-        }
     }
 
     public void setSelectedCircle(Circle circle, int row, int col, Color highlightColor) {

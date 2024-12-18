@@ -127,6 +127,12 @@ public class GameController {
         }
     }
 
+    private void move(Circle selectedCircle, int newRow, int newCol, Color color) {
+        gameService.movePiece(newRow, newCol);
+        updateUI(selectedCircle, newRow, newCol, color);
+        handleGameOver();
+    }
+
     private void move(Circle selectedCircle, int newRow, int newCol) {
         if (!gameService.isWithinBounds(newRow, newCol)) {
             Logger.warn("Ending position is out of bounds");
@@ -134,10 +140,10 @@ public class GameController {
         }
 
         if (blueMoveIsValid(newRow, newCol)) {
-            moveBlue(selectedCircle, newRow, newCol);
+            move(selectedCircle, newRow, newCol, Color.BLUE);
 
         } else if (redMoveIsValid(newRow, newCol)) {
-            moveRed(selectedCircle, newRow, newCol);
+            move(selectedCircle, newRow, newCol, Color.RED);
         } else {
             Logger.warn("Invalid move!");
         }
@@ -168,18 +174,6 @@ public class GameController {
             }
         }
         return null;
-    }
-
-    private void moveBlue(Circle selectedCircle, int newRow, int newCol) {
-        gameService.movePiece(newRow, newCol, true);
-        updateUI(selectedCircle, newRow, newCol, Color.BLUE);
-        handleGameOver();
-    }
-
-    private void moveRed(Circle selectedCircle, int newRow, int newCol) {
-        gameService.movePiece(newRow, newCol, false);
-        updateUI(selectedCircle, newRow, newCol, Color.RED);
-        handleGameOver();
     }
 
     private void updateUI(Circle selectedCircle, int newRow, int newCol, Color color) {

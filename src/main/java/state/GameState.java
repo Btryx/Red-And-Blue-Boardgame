@@ -104,12 +104,13 @@ public class GameState {
      * @param newRow  Row where the node will move to
      * @param newCol  Column where the node will move to
      */
-    public void move(int row, int col, int newRow, int newCol, boolean blueMove) {
-        if (blueMove) {
+    public void move(int row, int col, int newRow, int newCol) {
+        if (blueTurn) {
             performBlueMove(row, col, newRow, newCol);
         } else {
             performRedMove(row, col, newRow, newCol);
         }
+        blueTurn = !blueTurn;
     }
 
     /**
