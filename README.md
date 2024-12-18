@@ -1,33 +1,49 @@
-# A boardgame made with javaFX for my second semester subject: Software development in practice
-## The application
-## There are 22 red, and 3 blue pieces on the 5x5 sized controller. One player moves with red, the other, with blue. The blue player begins the application.
-## Every step consists of moving one piece.
+# Red And Blue Board Game
+A boardgame made with javaFX for my second semester subject: Software development in practice
+## 🎮 How to Play
+There are 22 red, and 3 blue pieces on the 5x5 sized controller. One player moves with red, the other, with blue. The blue player begins the game.
+Every step consists of moving one piece.
 
-1. The red player can only move to a neighbouring field
-2. The blue player can only move to a neighbouring field that is already occupied by a red piece. Then, this red piece will be removed.
+- **Movements**:
+  - The **Red Player** can only move to a neighbouring field.
+  - The **Blue Player** can only move to a neighbouring field that is already occupied by a red piece. Then, this red piece will be removed.
 
-## The red player wins, if all blue pieces are in one single row or column. The blue player wins, if they cannot move in any direction.
+- **Winning Conditions**:
+  - The **Red Player** wins if all **Blue Pieces** are aligned in the same row or column.
+  - The **Blue Player** wins if no more valid moves are possible for the Blue pieces.
+
+## 🎥 Demo
+    demo/BoardGame.exe
+
+## 🛠️ Technologies Used
+**Language**: Java
+
+**UI Framework**: JavaFX
+
+**Important Plugins**: Maven, JUnit, Checkstyle, JavaDoc, Tinylog, Gson, Lombok
 
 
-## To try out the game, run: demo/BoardGame.exe
+## 📸 Screenshots
+### At the start of the game, you can set the player names.
 
-At the start of the game, you can set the player names.
+![kép](https://github.com/user-attachments/assets/0c000e1f-26df-43d2-afe6-ee0b76e3ff0a)
 
-![kép](https://github.com/user-attachments/assets/3b2e5c72-f891-479d-b082-780bb0841bca)
 
-Blue player starts. Click a blue circle, and press the direction button to move.
+### Blue player starts. Click a blue circle to select it, than click a valid field to move it. The selected piece will have a slightly darker color.
 
-![kép](https://github.com/user-attachments/assets/0702a740-c5be-47aa-8532-1e152365464a)
+![kép](https://github.com/user-attachments/assets/d2e5c2f7-fa57-4539-829f-8084ae258a2c)
 
-![kép](https://github.com/user-attachments/assets/513c83e7-634d-4b7b-be0b-4c6eb5bba99f)
 
-When a player wins, the game will display that player's name.
 
-![kép](https://github.com/user-attachments/assets/56038677-4abb-491d-8496-86df3b4691a2)
+### When a player wins, the game will display that player's name.
 
-Check out the leaderboard to see the winners. The top ten will appear, based on how many moves it took to win.
+![kép](https://github.com/user-attachments/assets/d85c62f4-b343-497b-ba37-97bf7ab398c9)
 
-![kép](https://github.com/user-attachments/assets/677eeb1b-8f38-4a8f-b766-83b13c8b172d)
+
+### Check out the leaderboard to see the winners. The top ten will appear, based on how many moves it took to win.
+
+![kép](https://github.com/user-attachments/assets/315f954f-898c-4c37-ad86-0c194191c3fb)
+
 
 
 
