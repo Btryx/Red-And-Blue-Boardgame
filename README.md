@@ -14,7 +14,8 @@ Every step consists of moving one piece.
 
 ## 🎥 Demo
     demo/BoardGame.exe
-
+  You will need Java 11 or higher to run the exe!
+    
 ## 🛠️ Technologies Used
 **Language**: Java
 
