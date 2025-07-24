@@ -12,11 +12,11 @@ Every step consists of moving one piece.
   - The **Red Player** wins if all **Blue Pieces** are aligned in the same row or column.
   - The **Blue Player** wins if no more valid moves are possible for the Blue pieces.
 
-## 🎥 Demo
+## Demo
     demo/BoardGame.exe
   You will need Java 11 or higher to run the exe!
     
-## 🛠️ Technologies Used
+## Technologies Used
 **Language**: Java
 
 **UI Framework**: JavaFX
@@ -24,7 +24,7 @@ Every step consists of moving one piece.
 **Important Plugins**: Maven, JUnit, Checkstyle, JavaDoc, Tinylog, Gson, Lombok
 
 
-## 📸 Screenshots
+## Screenshots
 ### At the start of the game, you can set the player names.
 
 ![kép](https://github.com/user-attachments/assets/0c000e1f-26df-43d2-afe6-ee0b76e3ff0a)
